@@ -9,5 +9,5 @@ abstract interface class AppConstants {
   static final numberRegExp = RegExp(r'^[0-9]{4}$');
   static final amountRegExp = RegExp(r'^[0-9]+(\.[0-9][0-9])?$');
 
-  static const baseUrl = 'https://e387-115-242-148-218.ngrok-free.app';
+  static const baseUrl = 'https://69e2-113-193-210-86.ngrok-free.app';
 }

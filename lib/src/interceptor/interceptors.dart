@@ -5,8 +5,14 @@ import '../package/resorces/appConstance.dart';
 class DioInterceptors extends Interceptor {
   late Dio _dio;
 
-  DioClient() {
-    _dio = Dio(BaseOptions(baseUrl: AppConstants.baseUrl));
+  DioInterceptors() {
+    _initializeDio();
+  }
+
+  void _initializeDio() {
+    _dio = Dio(BaseOptions(
+      baseUrl: AppConstants.baseUrl,
+    ));
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         options.headers['Authorization'] = '';
@@ -29,7 +35,7 @@ class DioInterceptors extends Interceptor {
     }
   }
 
-  Future<Response> post(String endpoint) async {
+  Future<Response> post(String endpoint, {required Map<String, dynamic>? data}) async {
     try {
       return await _dio.post(endpoint, data: {});
     } on DioException catch (e) {
