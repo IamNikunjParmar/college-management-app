@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:college_management_app/src/components/user_modal.dart';
+import 'package:college_management_app/src/package/data/modal/courseModal/course_modal.dart';
+import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
@@ -13,13 +14,14 @@ part 'register_page_state.dart';
 class RegisterPageCubit extends Cubit<RegisterPageState> {
   RegisterPageCubit(super.initialState, {required this.context}) {
     getAllUser();
+    getAllCourse();
   }
   final BuildContext context;
+  final DioInterceptors dio = DioInterceptors();
 
   Future<List> getAllUser() async {
-    final DioInterceptors dio = DioInterceptors();
     try {
-      final response = await dio.get("${AppConstants.baseUrl}/getAllUser");
+      final response = await dio.get(ApiEndPoints.getAllUser);
       List allUser = (response.data as List);
       List<UserModal> newAllUser = allUser.map((e) => UserModal.fromJson(e)).toList();
       Log.success("allUser : ${newAllUser.length}");
@@ -31,13 +33,29 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
     }
   }
 
+  Future<List?> getAllCourse() async {
+    try {
+      final response = await dio.get(ApiEndPoints.getAllCourse);
+      List allCourse = (response.data as List);
+      List<CourseModal> newAllCourse = allCourse.map((e) => CourseModal.fromJson(e)).toList();
+      Log.success("AllCourse : ${newAllCourse.length}");
+      emit(state.copyWith(courseList: newAllCourse));
+      return allCourse;
+    } catch (e) {
+      Log.error(e);
+    }
+    return null;
+  }
+
   Future<void> registerUser(UserModal user) async {
     final DioInterceptors dio = DioInterceptors();
     try {
+      Log.info("Enter");
       final response = await dio.post(
-        "${AppConstants.baseUrl}/studentRegistration",
+        ApiEndPoints.studentRegistration,
         data: user.toJson(),
       );
+      Log.debug(user.toJson());
       if (response.statusCode == 200 || response.statusCode == 201) {
         Log.success("User registered successfully");
       } else {
@@ -48,10 +66,7 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
     }
   }
 
-  //In your RegisterPageCubit class
-  void selectDateOfBirth(
-    BuildContext context,
-  ) async {
+  void selectDateOfBirth(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),

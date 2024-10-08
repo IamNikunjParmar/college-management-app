@@ -47,10 +47,20 @@ class EmailTextField extends StatelessWidget {
       keyboardType: TextInputType.emailAddress,
       onFieldSubmitted: onSubmitted,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.email),
+        // prefixIcon: const Icon(Icons.email),
         labelText: labelText,
         hintText: hintText,
         suffixIcon: suffix,
+        // enabledBorder: const OutlineInputBorder(
+        //   borderRadius: BorderRadius.all(
+        //     Radius.circular(15),
+        //   ),
+        // ),
+        // focusedBorder: const OutlineInputBorder(
+        //   borderRadius: BorderRadius.all(
+        //     Radius.circular(15),
+        //   ),
+        // ),
       ),
     );
   }
@@ -106,16 +116,35 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         errorMaxLines: 5,
         labelText: widget.labelText,
         hintText: widget.hintText,
-        prefixIcon: const Icon(Icons.password),
         suffixIcon: IconButton(
-            onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-            icon: Icon(_isPasswordVisible ? Icons.remove_red_eye : Icons.visibility_off)),
+          onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+          icon: Icon(
+            _isPasswordVisible ? Icons.remove_red_eye : Icons.visibility_off,
+          ),
+        ),
       ),
     );
   }
 }
 
 class CustomTextField extends StatelessWidget {
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    this.focusNode,
+    this.autofocus = false,
+    this.validator,
+    this.autofillHints,
+    this.textInputAction,
+    this.onSubmitted,
+    this.hintText,
+    this.labelText,
+    this.isReadOnly = false,
+    this.suffix,
+    this.onChanged,
+    this.keyBoardType,
+  });
+
   final TextEditingController controller;
   final FocusNode? focusNode;
   final bool autofocus;
@@ -128,42 +157,38 @@ class CustomTextField extends StatelessWidget {
   final String? labelText;
   final bool isReadOnly;
   final Widget? suffix;
-
-  const CustomTextField({
-    super.key,
-    required this.controller,
-    this.focusNode,
-    required this.autofocus,
-    this.validator,
-    this.autofillHints,
-    this.textInputAction,
-    this.onSubmitted,
-    this.onChanged,
-    this.hintText,
-    this.labelText,
-    required this.isReadOnly,
-    this.suffix,
-  });
+  final TextInputType? keyBoardType;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onTapOutside: (event) {
-        FocusScope.of(context).unfocus();
-      },
+      onChanged: onChanged,
+      readOnly: isReadOnly,
+      controller: controller,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autofillHints: {...?autofillHints, AutofillHints.email},
+      validator: validator,
+      onTapOutside: (event) => FocusScope.of(context).unfocus(),
+      textInputAction: textInputAction,
+      keyboardType: TextInputType.emailAddress,
+      onFieldSubmitted: onSubmitted,
       decoration: InputDecoration(
-        enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
-          ),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
-          ),
-        ),
+        // prefixIcon: const Icon(Icons.email),
         labelText: labelText,
-        labelStyle: GoogleFonts.plusJakartaSans(),
+        hintText: hintText,
+        suffixIcon: suffix,
+        // enabledBorder: const OutlineInputBorder(
+        //   borderRadius: BorderRadius.all(
+        //     Radius.circular(15),
+        //   ),
+        // ),
+        // focusedBorder: const OutlineInputBorder(
+        //   borderRadius: BorderRadius.all(
+        //     Radius.circular(15),
+        //   ),
+        // ),
       ),
     );
   }

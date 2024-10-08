@@ -4,10 +4,20 @@ abstract interface class AppConstants {
   );
   static final passwordPatternRegExp =
       RegExp(r'^.*(?=.{8,255})((?=.*[!@#$%^&*_,]))(?=.*\d)((?=.*[A-Z]))((?=.*[a-z])).*$');
-
+  static final newEmailReg = RegExp(r'^[a-z0-9_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
   static final namePatternRegExp = RegExp(r'^[a-zA-Z ]{3,60}$');
-  static final numberRegExp = RegExp(r'^[0-9]{4}$');
+  static final numberRegExp = RegExp(r'^[0-9]$');
   static final amountRegExp = RegExp(r'^[0-9]+(\.[0-9][0-9])?$');
+  static final confirmPasswordRegExp = RegExp(r'^(?!$passwordPatternRegExp$).*$');
 
-  static const baseUrl = 'https://69e2-113-193-210-86.ngrok-free.app';
+  static const baseUrl = 'https://c394-113-193-210-86.ngrok-free.app';
+
+  //Body data variable
+  static const courseName = 'courseName';
+}
+
+abstract interface class ApiEndPoints {
+  static const studentRegistration = '/studentRegistration';
+  static const getAllUser = '/getAllUser';
+  static const getAllCourse = "/getCoures";
 }

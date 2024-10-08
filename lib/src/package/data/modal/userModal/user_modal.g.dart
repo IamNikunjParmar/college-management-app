@@ -7,11 +7,11 @@ part of 'user_modal.dart';
 // **************************************************************************
 
 UserModal _$UserModalFromJson(Map<String, dynamic> json) => UserModal(
-      alternatePhoneNo: (json['alternatePhoneNo'] as num?)?.toInt(),
+      alternatePhoneNo: json['alternatePhoneNo'] as String?,
+      confirmPassword: json['confirmPassword'] as String?,
       studentName: json['studentName'] as String,
       email: json['email'] as String,
       password: json['password'] as String,
-      confirmPassword: json['confirmPassword'] as String?,
       phoneNo: (json['phoneNo'] as num).toInt(),
       courseName: json['courseName'] as String,
       meritRank: (json['meritRank'] as num).toInt(),

@@ -7,6 +7,7 @@ class RegisterPageState extends Equatable {
   final String? selectedGender;
   final List<UserModal> userList;
   final String? selectedDateOfBirth;
+  final List<CourseModal> courseList;
 
   const RegisterPageState({
     this.selectedGender,
@@ -15,6 +16,7 @@ class RegisterPageState extends Equatable {
     this.isPhysicallyHandicapped,
     this.currentStep = 0,
     this.userList = const <UserModal>[],
+    this.courseList = const <CourseModal>[],
   });
 
   RegisterPageState copyWith({
@@ -24,6 +26,7 @@ class RegisterPageState extends Equatable {
     String? selectCourse,
     List<UserModal>? userList,
     String? selectedDateOfBirth,
+    List<CourseModal>? courseList,
   }) {
     return RegisterPageState(
       selectCourse: selectCourse ?? this.selectCourse,
@@ -32,6 +35,7 @@ class RegisterPageState extends Equatable {
       selectedGender: selectedGender ?? this.selectedGender,
       userList: userList ?? this.userList,
       selectedDateOfBirth: selectedDateOfBirth ?? this.selectedDateOfBirth,
+      courseList: courseList ?? this.courseList,
     );
   }
 

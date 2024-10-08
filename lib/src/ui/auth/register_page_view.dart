@@ -1,16 +1,19 @@
 import 'package:college_management_app/src/components/custom_text.dart';
-import 'package:college_management_app/src/components/user_modal.dart';
+import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
 import 'package:college_management_app/src/logic/auth/register/register_page_cubit.dart';
+import 'package:college_management_app/src/package/helper/validator.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../interceptor/input_filed.dart';
+import '../../localization/generated/l10n.dart';
 
 class RegisterPageView extends StatelessWidget {
   static const String routeName = 'register_page_view';
   RegisterPageView({super.key});
+
   final TextEditingController studentNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -37,10 +40,14 @@ class RegisterPageView extends StatelessWidget {
     );
   }
 
+  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     DateTime? selectedDateOfBirth;
     List<String> courses = ['Course A', 'Course B', 'Course C'];
+
+    final l10n = CMLocalizations.of(context);
     return BlocBuilder<RegisterPageCubit, RegisterPageState>(
       builder: (context, state) {
         return Scaffold(
@@ -50,9 +57,9 @@ class RegisterPageView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Center(
+                  Center(
                     child: CustomText(
-                      title: 'Student Registration',
+                      title: l10n.studentRegistration,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -83,14 +90,15 @@ class RegisterPageView extends StatelessWidget {
                         Step(
                           isActive: state.currentStep == 0,
                           state: StepState.indexed,
-                          title: const Text('General Details'),
+                          title: Text(l10n.generalDetails),
                           content: Form(
+                            key: globalKey,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Gap(20),
-                                const CustomText(
-                                  title: 'StudentName',
+                                CustomText(
+                                  title: l10n.studentName,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -100,67 +108,67 @@ class RegisterPageView extends StatelessWidget {
                                   controller: studentNameController,
                                   autofocus: true,
                                   isReadOnly: true,
-                                  labelText: 'Enter your student Name',
+                                  hintText: l10n.enterYourName,
+                                  validator: validateFullName,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Email Address',
+                                CustomText(
+                                  title: l10n.emailAddress,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
                                 ),
                                 const Gap(5),
-                                CustomTextField(
+                                EmailTextField(
+                                  hintText: l10n.enterYourEmail,
                                   controller: emailController,
-                                  autofocus: true,
-                                  isReadOnly: true,
-                                  labelText: 'Enter your Email',
+                                  validator: validateEmailAddress,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Password',
+                                CustomText(
+                                  title: l10n.password,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
                                 ),
                                 const Gap(5),
-                                CustomTextField(
+                                PasswordTextField(
                                   controller: passwordController,
-                                  autofocus: true,
-                                  isReadOnly: true,
-                                  labelText: 'Enter your Password',
+                                  validator: validatePassword,
+                                  hintText: l10n.enterYourPassword,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Confirm Password',
+                                CustomText(
+                                  title: l10n.confirmPassword,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
                                 ),
                                 const Gap(5),
-                                CustomTextField(
+                                PasswordTextField(
                                   controller: confirmPasswordController,
-                                  autofocus: true,
-                                  isReadOnly: true,
-                                  labelText: 'Enter your Confirm Password',
+                                  hintText: l10n.enterYourConfirmPassword,
+                                  validator: (value) => validateConfirmPassword(value, confirmPasswordController.text),
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Mobile Number',
+                                CustomText(
+                                  title: l10n.mobileNumber,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
                                 ),
                                 const Gap(5),
                                 CustomTextField(
+                                  validator: validateNumber,
+                                  keyBoardType: TextInputType.number,
+                                  textInputAction: TextInputAction.next,
+                                  hintText: l10n.enterYourMobileNumber,
                                   controller: mobileController,
                                   autofocus: true,
-                                  isReadOnly: true,
-                                  labelText: 'Enter your Mobile Number',
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Course Name',
+                                CustomText(
+                                  title: l10n.courseName,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -168,17 +176,7 @@ class RegisterPageView extends StatelessWidget {
                                 const Gap(5),
                                 TextFormField(
                                   decoration: InputDecoration(
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(15),
-                                      ),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(15),
-                                      ),
-                                    ),
-                                    labelText: state.selectCourse == null ? 'Select Course' : '',
+                                    hintText: l10n.selectCourse,
                                     suffixIcon: DropdownButtonHideUnderline(
                                       child: SizedBox(
                                         width: state.selectCourse == null ? 200 : 400,
@@ -204,18 +202,18 @@ class RegisterPageView extends StatelessWidget {
                                   ),
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Merit Rank',
+                                CustomText(
+                                  title: l10n.meritRank,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
                                 ),
                                 const Gap(5),
                                 CustomTextField(
+                                  hintText: l10n.enterYourMeritRank,
                                   controller: meritRankController,
                                   autofocus: true,
                                   isReadOnly: true,
-                                  labelText: 'Enter your Merit rank',
                                 ),
                               ],
                             ),
@@ -224,41 +222,41 @@ class RegisterPageView extends StatelessWidget {
                         // Personal Details
                         Step(
                           isActive: state.currentStep == 1,
-                          title: const Text('Personal Details'),
+                          title: Text(l10n.personalDetails),
                           content: Form(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const CustomText(
-                                  title: 'Father\'s Name',
+                                CustomText(
+                                  title: l10n.fatherName,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
                                 ),
                                 const Gap(5),
                                 CustomTextField(
+                                  hintText: l10n.enterYourFatherName,
                                   autofocus: true,
                                   isReadOnly: true,
                                   controller: fatherController,
-                                  labelText: 'Enter your father\'s name',
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Mother\'s Name',
+                                CustomText(
+                                  title: l10n.motherName,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
                                 ),
                                 const Gap(5),
                                 CustomTextField(
+                                  hintText: l10n.enterYourMotherName,
                                   autofocus: true,
                                   isReadOnly: true,
                                   controller: motherController,
-                                  labelText: 'Enter your mother\'s name',
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Cast',
+                                CustomText(
+                                  title: l10n.cast,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -268,11 +266,11 @@ class RegisterPageView extends StatelessWidget {
                                   autofocus: true,
                                   isReadOnly: true,
                                   controller: studentNameController,
-                                  labelText: 'Enter your cast',
+                                  hintText: l10n.enterYourCast,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'City',
+                                CustomText(
+                                  title: l10n.city,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -282,11 +280,11 @@ class RegisterPageView extends StatelessWidget {
                                   autofocus: true,
                                   isReadOnly: true,
                                   controller: cityController,
-                                  labelText: 'Enter your city',
+                                  hintText: l10n.enterYourCity,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Country',
+                                CustomText(
+                                  title: l10n.country,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -295,12 +293,12 @@ class RegisterPageView extends StatelessWidget {
                                 CustomTextField(
                                   autofocus: true,
                                   isReadOnly: true,
-                                  labelText: 'Enter your Country',
+                                  hintText: l10n.enterYourCountry,
                                   controller: countryController,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Address',
+                                CustomText(
+                                  title: l10n.address,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -308,13 +306,13 @@ class RegisterPageView extends StatelessWidget {
                                 const Gap(5),
                                 CustomTextField(
                                   controller: addressController,
-                                  labelText: 'Enter your address',
+                                  hintText: l10n.enterYourAddress,
                                   autofocus: true,
                                   isReadOnly: true,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Pin Code',
+                                CustomText(
+                                  title: l10n.pinCode,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -322,13 +320,13 @@ class RegisterPageView extends StatelessWidget {
                                 const Gap(5),
                                 CustomTextField(
                                   controller: pinCodeController,
-                                  labelText: 'Enter your pin code',
+                                  hintText: l10n.enterYourPinCode,
                                   autofocus: true,
                                   isReadOnly: true,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Annual Income',
+                                CustomText(
+                                  title: l10n.annualIncome,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -336,13 +334,13 @@ class RegisterPageView extends StatelessWidget {
                                 const Gap(5),
                                 CustomTextField(
                                   controller: annualIncomeController,
-                                  labelText: 'Enter your Annual Income',
+                                  hintText: l10n.enterYourAnnualIncome,
                                   autofocus: true,
                                   isReadOnly: true,
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'AlertNate Mobile Number',
+                                CustomText(
+                                  title: l10n.alertNateMobileNumber,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -350,13 +348,13 @@ class RegisterPageView extends StatelessWidget {
                                 const Gap(5),
                                 CustomTextField(
                                   controller: alertNateNumberController,
-                                  labelText: 'Enter your Mobile Number',
+                                  hintText: l10n.enterYourOptionalNumber,
                                   autofocus: true,
                                   isReadOnly: true,
                                 ),
                                 const Gap(20),
-                                const CustomText(
-                                  title: 'Physically Handicapped',
+                                CustomText(
+                                  title: l10n.physicallyHandicapped,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -385,8 +383,8 @@ class RegisterPageView extends StatelessWidget {
                                   ],
                                 ),
                                 const Gap(20),
-                                const CustomText(
-                                  title: 'Gender',
+                                CustomText(
+                                  title: l10n.gender,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -415,8 +413,8 @@ class RegisterPageView extends StatelessWidget {
                                   ],
                                 ),
                                 const Gap(10),
-                                const CustomText(
-                                  title: 'Date of Birth',
+                                CustomText(
+                                  title: l10n.dateOfBirth,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   colorName: Colors.blue,
@@ -428,18 +426,6 @@ class RegisterPageView extends StatelessWidget {
                                   child: ElevatedButton(
                                     style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue)),
                                     onPressed: () {
-                                      // final DateTime? pickedDate = await showDatePicker(
-                                      //   context: context,
-                                      //   initialDate: selectedDateOfBirth ?? DateTime.now(),
-                                      //   firstDate: DateTime(1900),
-                                      //   lastDate: DateTime.now(),
-                                      // );
-                                      // if (pickedDate != null && pickedDate != selectedDateOfBirth) {
-                                      //   // setState(() {
-                                      //   //   selectedDateOfBirth = pickedDate;
-                                      //   // });
-                                      //   context.read<RegisterPageCubit>().selectDateOfBirth(context);
-                                      // }
                                       context.read<RegisterPageCubit>().selectDateOfBirth(context);
                                     },
                                     child: Text(
@@ -460,29 +446,31 @@ class RegisterPageView extends StatelessWidget {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Log.error(mobileController.text.trim());
+                        globalKey.currentState!.validate();
                         UserModal user = UserModal(
-                          studentName: studentNameController.text,
-                          email: emailController.text,
-                          password: passwordController.text,
-                          phoneNo: 9265745540,
-                          courseName: state.selectCourse.toString(),
-                          meritRank: 56,
-                          fatherName: fatherController.text,
-                          motherName: motherController.text,
-                          cast: castController.text,
-                          city: cityController.text,
-                          country: countryController.text,
-                          address: addressController.text,
-                          pinCode: 455656,
-                          familyAnnualIncome: annualIncomeController.text,
-                          physicallyHandicapped: state.isPhysicallyHandicapped.toString(),
-                          gender: state.selectedGender.toString(),
-                          dateOfBirth: state.selectedDateOfBirth!,
+                          studentName: 'vikas',
+                          email: 'nikunjparmar446@gmail.com',
+                          password: '12345',
+                          phoneNo: 9265456440,
+                          courseName: 'CIVIL ENGINEERING',
+                          meritRank: 58,
+                          fatherName: 'Atulbhai',
+                          motherName: 'Dipaben',
+                          cast: 'open',
+                          city: 'Surat',
+                          country: 'India',
+                          address: '33,ranchhod nagar',
+                          pinCode: 395006,
+                          familyAnnualIncome: '18Lakh',
+                          physicallyHandicapped: 'no',
+                          gender: 'Male',
+                          dateOfBirth: '07-11-2001',
+                          alternatePhoneNo: null,
+                          confirmPassword: '12345',
                         );
                         context.read<RegisterPageCubit>().registerUser(user);
                       },
-                      child: const Text(" Register"),
+                      child: Text(l10n.register),
                     ),
                   ),
                 ],

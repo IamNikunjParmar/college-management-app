@@ -24,14 +24,14 @@ class UserModal {
   @JsonKey(name: 'dateOfbirth')
   String dateOfBirth;
   String familyAnnualIncome;
-  int? alternatePhoneNo;
+  String? alternatePhoneNo;
 
   UserModal({
     this.alternatePhoneNo,
+    this.confirmPassword,
     required this.studentName,
     required this.email,
     required this.password,
-    this.confirmPassword,
     required this.phoneNo,
     required this.courseName,
     required this.meritRank,
@@ -94,7 +94,7 @@ class UserModal {
     String? cast,
     String? dateOfbirth,
     String? familyAnnualIncome,
-    int? alternatePhoneNo,
+    String? alternatePhoneNo,
   }) {
     return UserModal(
       studentName: studentName ?? this.studentName,
@@ -120,18 +120,16 @@ class UserModal {
   }
 }
 
-/*
-
-  import 'package:json_annotation/json_annotation.dart';
+/*import 'package:json_annotation/json_annotation.dart';
 
 part 'user_modal.g.dart';
 
 @JsonSerializable()
 class UserModal {
   @JsonKey(name: '_id')
-  final String id;
+  //final String id;
   final String studentName;
-  finalString email;
+  final String email;
   final int phoneNo;
   final String password;
   final String gender;
@@ -149,8 +147,8 @@ class UserModal {
   final int meritRank;
   final String courseName;
   final int status;
-  final List<Registrationfees> registrationfees;
-  final List<UplodedDocumnets> uplodedDocumnets;
+  final List<Registrationfees>? registrationfees;
+  final List<UplodedDocumnets>? uplodedDocumnets;
   final String createdAt;
   final String updatedAt;
   @JsonKey(name: '__v')
@@ -159,7 +157,7 @@ class UserModal {
   final int authStatus;
 
   UserModal({
-    required this.id,
+    //required this.id,
     required this.studentName,
     required this.email,
     required this.phoneNo,
@@ -179,8 +177,8 @@ class UserModal {
     required this.meritRank,
     required this.courseName,
     required this.status,
-    required this.registrationfees,
-    required this.uplodedDocumnets,
+    this.registrationfees,
+    this.uplodedDocumnets,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
@@ -254,7 +252,4 @@ class Aadharcard {
 
   Map<String, dynamic> toJson() => _$AadharcardToJson(this);
 }
-
-
-
-  */
+*/
