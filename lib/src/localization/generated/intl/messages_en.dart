@@ -65,15 +65,29 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter Your Password"),
         "enterYourPinCode":
             MessageLookupByLibrary.simpleMessage("Enter your pin code"),
+        "errorAddressEmpty":
+            MessageLookupByLibrary.simpleMessage("Please enter Address!"),
+        "errorAnnualIncomeEmpty":
+            MessageLookupByLibrary.simpleMessage("Please enter AnnualIncome!"),
+        "errorCastEmpty":
+            MessageLookupByLibrary.simpleMessage("Please enter Cast!"),
+        "errorCityNameEmpty":
+            MessageLookupByLibrary.simpleMessage("please enter City Name!"),
         "errorConfirmPasswordCannotBeSameAsPrevious":
             MessageLookupByLibrary.simpleMessage(
                 "Confirm password cannot be the same as previous password"),
         "errorConfirmPasswordEmpty": MessageLookupByLibrary.simpleMessage(
             "Please enter confirm password!"),
+        "errorCountryNameEmpty":
+            MessageLookupByLibrary.simpleMessage("Please enter CountryName!"),
+        "errorCourseNameEmpty":
+            MessageLookupByLibrary.simpleMessage("please Select Course"),
         "errorEmailAddressEmpty":
             MessageLookupByLibrary.simpleMessage("Please enter email address!"),
         "errorEmailAddressInvalid": MessageLookupByLibrary.simpleMessage(
             "Please enter valid email address!"),
+        "errorMeritRankEmpty":
+            MessageLookupByLibrary.simpleMessage("Please enter Merit Rank!"),
         "errorNameEmpty":
             MessageLookupByLibrary.simpleMessage("Please enter name!"),
         "errorNameInvalid":
@@ -87,6 +101,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "• Password length must be within 8-24 characters."),
         "errorPasswordSupportedCharacters": MessageLookupByLibrary.simpleMessage(
             "• Password must contain capital letter, small letter, number & an special character [!,@,#,\$,%,^,&,*,_]!"),
+        "errorPinCodeEmpty":
+            MessageLookupByLibrary.simpleMessage("Please enter PinCode!"),
         "fatherName": MessageLookupByLibrary.simpleMessage("Father\\\'s Name"),
         "gender": MessageLookupByLibrary.simpleMessage("Gender"),
         "generalDetails":

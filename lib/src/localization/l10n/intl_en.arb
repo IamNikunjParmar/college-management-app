@@ -49,5 +49,13 @@
   "errorPasswordAndConfirmPasswordNotMatch": "Password and confirm password must match!",
   "errorEmailAddressInvalid": "Please enter valid email address!",
   "errorNameInvalid": "Please enter valid name!",
+  "errorCourseNameEmpty": "please Select Course",
+  "errorMeritRankEmpty": "Please enter Merit Rank!",
+  "errorCastEmpty": "Please enter Cast!",
+  "errorCityNameEmpty": "please enter City Name!",
+  "errorCountryNameEmpty": "Please enter CountryName!",
+  "errorAddressEmpty": "Please enter Address!",
+  "errorPinCodeEmpty": "Please enter PinCode!",
+  "errorAnnualIncomeEmpty": "Please enter AnnualIncome!",
   "errorConfirmPasswordCannotBeSameAsPrevious": "Confirm password cannot be the same as previous password"
 }

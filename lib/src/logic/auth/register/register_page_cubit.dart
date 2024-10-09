@@ -9,13 +9,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../ui/auth/verifyOtp/registration_verification.dart';
+
 part 'register_page_state.dart';
 
 class RegisterPageCubit extends Cubit<RegisterPageState> {
   RegisterPageCubit(super.initialState, {required this.context}) {
     getAllUser();
-    getAllCourse();
   }
+
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();
 
@@ -36,20 +38,30 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
   Future<List?> getAllCourse() async {
     try {
       final response = await dio.get(ApiEndPoints.getAllCourse);
-      List allCourse = (response.data as List);
-      List<CourseModal> newAllCourse = allCourse.map((e) => CourseModal.fromJson(e)).toList();
-      Log.success("AllCourse : ${newAllCourse.length}");
-      emit(state.copyWith(courseList: newAllCourse));
-      return allCourse;
+      List<CourseModal> newAllCourse = [];
+      if (response.statusCode == 200) {
+        List allCourse = (response.data as List);
+        newAllCourse = allCourse.map((e) => CourseModal.fromJson(e)).toList();
+        Log.success("AllCourse : ${newAllCourse.length}");
+        emit(state.copyWith(courseList: newAllCourse));
+      } else if (response.statusCode == 404) {
+        // Handle 404 error (e.g., show an error message)
+        Log.error('API endpoint not found: ${ApiEndPoints.getAllCourse}');
+      } else {
+        Log.error('Other: ${response.statusCode}');
+      }
+
+      return newAllCourse;
     } catch (e) {
       Log.error(e);
     }
     return null;
   }
 
-  Future<void> registerUser(UserModal user) async {
+  Future<void> registerUser(UserModal user, Object? arguments) async {
     final DioInterceptors dio = DioInterceptors();
     try {
+      emit(state.copyWith(isLoading: true));
       Log.info("Enter");
       final response = await dio.post(
         ApiEndPoints.studentRegistration,
@@ -58,11 +70,16 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
       Log.debug(user.toJson());
       if (response.statusCode == 200 || response.statusCode == 201) {
         Log.success("User registered successfully");
+        if (context.mounted) {
+          Navigator.of(context).pushNamed(RegistrationVerification.routeName, arguments: arguments);
+        }
       } else {
         Log.error("Registration failed: ${response.statusCode}");
+        Log.error(response);
       }
     } catch (e) {
       Log.error("Error during registration: $e");
+      Log.error(e.toString());
     }
   }
 
@@ -82,11 +99,11 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
     emit(state.copyWith(selectedGender: value));
   }
 
-  selectedPhysicallyHandicapped(bool? value) {
+  selectedPhysicallyHandicapped(String value) {
     emit(state.copyWith(isPhysicallyHandicapped: value));
   }
 
-  selectCourse(String? newValue) {
+  selectCourse(String newValue) {
     emit(state.copyWith(selectCourse: newValue));
   }
 

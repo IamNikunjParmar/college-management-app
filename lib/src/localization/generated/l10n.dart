@@ -540,6 +540,86 @@ class CMLocalizations {
     );
   }
 
+  /// `please Select Course`
+  String get errorCourseNameEmpty {
+    return Intl.message(
+      'please Select Course',
+      name: 'errorCourseNameEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter Merit Rank!`
+  String get errorMeritRankEmpty {
+    return Intl.message(
+      'Please enter Merit Rank!',
+      name: 'errorMeritRankEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter Cast!`
+  String get errorCastEmpty {
+    return Intl.message(
+      'Please enter Cast!',
+      name: 'errorCastEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `please enter City Name!`
+  String get errorCityNameEmpty {
+    return Intl.message(
+      'please enter City Name!',
+      name: 'errorCityNameEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter CountryName!`
+  String get errorCountryNameEmpty {
+    return Intl.message(
+      'Please enter CountryName!',
+      name: 'errorCountryNameEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter Address!`
+  String get errorAddressEmpty {
+    return Intl.message(
+      'Please enter Address!',
+      name: 'errorAddressEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter PinCode!`
+  String get errorPinCodeEmpty {
+    return Intl.message(
+      'Please enter PinCode!',
+      name: 'errorPinCodeEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter AnnualIncome!`
+  String get errorAnnualIncomeEmpty {
+    return Intl.message(
+      'Please enter AnnualIncome!',
+      name: 'errorAnnualIncomeEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm password cannot be the same as previous password`
   String get errorConfirmPasswordCannotBeSameAsPrevious {
     return Intl.message(

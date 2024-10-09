@@ -1,18 +1,42 @@
 import 'package:college_management_app/src/components/custom_text.dart';
+import 'package:college_management_app/src/package/data/modal/courseModal/course_modal.dart';
 import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
 import 'package:college_management_app/src/logic/auth/register/register_page_cubit.dart';
 import 'package:college_management_app/src/package/helper/validator.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
+import 'package:college_management_app/src/ui/auth/verifyOtp/registration_verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../interceptor/input_filed.dart';
-import '../../localization/generated/l10n.dart';
+import '../../../interceptor/input_filed.dart';
+import '../../../localization/generated/l10n.dart';
 
-class RegisterPageView extends StatelessWidget {
+class RegisterPageView extends StatefulWidget {
   static const String routeName = 'register_page_view';
-  RegisterPageView({super.key});
+
+  const RegisterPageView({super.key});
+
+  static Widget builder(BuildContext context) {
+    return BlocProvider(
+      create: (context) => RegisterPageCubit(
+        const RegisterPageState(),
+        context: context,
+      ),
+      child: const RegisterPageView(),
+    );
+  }
+
+  @override
+  State<RegisterPageView> createState() => _RegisterPageViewState();
+}
+
+class _RegisterPageViewState extends State<RegisterPageView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<RegisterPageCubit>().getAllCourse();
+  }
 
   final TextEditingController studentNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -29,24 +53,12 @@ class RegisterPageView extends StatelessWidget {
   final TextEditingController annualIncomeController = TextEditingController();
   final TextEditingController alertNateNumberController = TextEditingController();
   final TextEditingController castController = TextEditingController();
-
-  static Widget builder(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RegisterPageCubit(
-        const RegisterPageState(),
-        context: context,
-      ),
-      child: RegisterPageView(),
-    );
-  }
+  final TextEditingController selectedCourseController = TextEditingController();
 
   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    DateTime? selectedDateOfBirth;
-    List<String> courses = ['Course A', 'Course B', 'Course C'];
-
     final l10n = CMLocalizations.of(context);
     return BlocBuilder<RegisterPageCubit, RegisterPageState>(
       builder: (context, state) {
@@ -65,35 +77,35 @@ class RegisterPageView extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: Stepper(
-                      elevation: 5,
-                      type: StepperType.horizontal,
-                      connectorColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return Colors.blue;
-                        } else {
-                          return Colors.grey;
-                        }
-                      }),
-                      currentStep: state.currentStep,
-                      onStepTapped: (value) {
-                        context.read<RegisterPageCubit>().updateStep(value);
-                      },
-                      onStepContinue: () {
-                        context.read<RegisterPageCubit>().onStepContinue(state.currentStep);
-                      },
-                      onStepCancel: () {
-                        context.read<RegisterPageCubit>().onStepCancel(state.currentStep);
-                      },
-                      steps: [
-                        // General Details
-                        Step(
-                          isActive: state.currentStep == 0,
-                          state: StepState.indexed,
-                          title: Text(l10n.generalDetails),
-                          content: Form(
-                            key: globalKey,
-                            child: Column(
+                    child: Form(
+                      key: globalKey,
+                      child: Stepper(
+                        elevation: 5,
+                        type: StepperType.horizontal,
+                        connectorColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return Colors.blue;
+                          } else {
+                            return Colors.grey;
+                          }
+                        }),
+                        currentStep: state.currentStep,
+                        onStepTapped: (value) {
+                          context.read<RegisterPageCubit>().updateStep(value);
+                        },
+                        onStepContinue: () {
+                          context.read<RegisterPageCubit>().onStepContinue(state.currentStep);
+                        },
+                        onStepCancel: () {
+                          context.read<RegisterPageCubit>().onStepCancel(state.currentStep);
+                        },
+                        steps: [
+                          // General Details
+                          Step(
+                            isActive: state.currentStep == 0,
+                            state: StepState.indexed,
+                            title: Text(l10n.generalDetails),
+                            content: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Gap(20),
@@ -106,8 +118,6 @@ class RegisterPageView extends StatelessWidget {
                                 const Gap(5),
                                 CustomTextField(
                                   controller: studentNameController,
-                                  autofocus: true,
-                                  isReadOnly: true,
                                   hintText: l10n.enterYourName,
                                   validator: validateFullName,
                                 ),
@@ -164,7 +174,6 @@ class RegisterPageView extends StatelessWidget {
                                   textInputAction: TextInputAction.next,
                                   hintText: l10n.enterYourMobileNumber,
                                   controller: mobileController,
-                                  autofocus: true,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -175,31 +184,65 @@ class RegisterPageView extends StatelessWidget {
                                 ),
                                 const Gap(5),
                                 TextFormField(
+                                  controller: selectedCourseController,
+                                  validator: validateCourseName,
                                   decoration: InputDecoration(
                                     hintText: l10n.selectCourse,
                                     suffixIcon: DropdownButtonHideUnderline(
                                       child: SizedBox(
                                         width: state.selectCourse == null ? 200 : 400,
-                                        child: DropdownButton<String>(
-                                          isExpanded: true,
-                                          value: state.selectCourse,
-                                          onChanged: (String? newValue) {
-                                            context.read<RegisterPageCubit>().selectCourse(newValue);
+                                        child: BlocBuilder<RegisterPageCubit, RegisterPageState>(
+                                          builder: (context, state) {
+                                            if (state.courseList.isNotEmpty) {
+                                              return DropdownButton<String>(
+                                                isExpanded: true,
+                                                value: state.selectCourse,
+                                                iconEnabledColor: Colors.blue,
+                                                menuMaxHeight: 400,
+                                                borderRadius: const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                                //menuWidth: 400,
+                                                iconSize: 30,
+                                                onChanged: (newValue) {
+                                                  selectedCourseController.text = newValue!;
+                                                  context.read<RegisterPageCubit>().selectCourse(newValue);
+                                                },
+                                                icon: const Icon(Icons.arrow_drop_down),
+                                                style: const TextStyle(color: Colors.black),
+                                                underline: Container(
+                                                  height: 2,
+                                                  color: Colors.blue,
+                                                ),
+                                                selectedItemBuilder: (BuildContext context) {
+                                                  return state.courseList.map<Widget>((CourseModal course) {
+                                                    return Padding(
+                                                      padding: const EdgeInsets.only(left: 15),
+                                                      child: Text(course.courseName),
+                                                    );
+                                                  }).toList();
+                                                },
+                                                items: state.courseList
+                                                    .map<DropdownMenuItem<String>>((CourseModal course) {
+                                                  return DropdownMenuItem<String>(
+                                                    alignment: Alignment.centerLeft,
+                                                    value: course.courseName,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 15),
+                                                      child: Text(course.courseName),
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                              );
+                                            } else {
+                                              return const Center(child: CircularProgressIndicator());
+                                            }
                                           },
-                                          items: courses.map<DropdownMenuItem<String>>((String value) {
-                                            return DropdownMenuItem<String>(
-                                              alignment: Alignment.centerLeft,
-                                              value: value,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left: 15),
-                                                child: Text(value),
-                                              ),
-                                            );
-                                          }).toList(),
                                         ),
                                       ),
                                     ),
                                   ),
+                                  // ... other properties ...
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -212,19 +255,17 @@ class RegisterPageView extends StatelessWidget {
                                 CustomTextField(
                                   hintText: l10n.enterYourMeritRank,
                                   controller: meritRankController,
-                                  autofocus: true,
-                                  isReadOnly: true,
+                                  validator: validateMeritRank,
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        // Personal Details
-                        Step(
-                          isActive: state.currentStep == 1,
-                          title: Text(l10n.personalDetails),
-                          content: Form(
-                            child: Column(
+                          // Personal Details
+                          Step(
+                            isActive: state.currentStep == 1,
+                            state: StepState.indexed,
+                            title: Text(l10n.personalDetails),
+                            content: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomText(
@@ -237,8 +278,8 @@ class RegisterPageView extends StatelessWidget {
                                 CustomTextField(
                                   hintText: l10n.enterYourFatherName,
                                   autofocus: true,
-                                  isReadOnly: true,
                                   controller: fatherController,
+                                  validator: validateFullName,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -251,8 +292,8 @@ class RegisterPageView extends StatelessWidget {
                                 CustomTextField(
                                   hintText: l10n.enterYourMotherName,
                                   autofocus: true,
-                                  isReadOnly: true,
                                   controller: motherController,
+                                  validator: validateFullName,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -264,9 +305,9 @@ class RegisterPageView extends StatelessWidget {
                                 const Gap(5),
                                 CustomTextField(
                                   autofocus: true,
-                                  isReadOnly: true,
-                                  controller: studentNameController,
+                                  controller: castController,
                                   hintText: l10n.enterYourCast,
+                                  validator: validateCast,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -277,10 +318,9 @@ class RegisterPageView extends StatelessWidget {
                                 ),
                                 const Gap(5),
                                 CustomTextField(
-                                  autofocus: true,
-                                  isReadOnly: true,
                                   controller: cityController,
                                   hintText: l10n.enterYourCity,
+                                  validator: validateCityName,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -291,10 +331,9 @@ class RegisterPageView extends StatelessWidget {
                                 ),
                                 const Gap(5),
                                 CustomTextField(
-                                  autofocus: true,
-                                  isReadOnly: true,
                                   hintText: l10n.enterYourCountry,
                                   controller: countryController,
+                                  validator: validateCountryName,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -307,8 +346,7 @@ class RegisterPageView extends StatelessWidget {
                                 CustomTextField(
                                   controller: addressController,
                                   hintText: l10n.enterYourAddress,
-                                  autofocus: true,
-                                  isReadOnly: true,
+                                  validator: validateAddress,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -321,8 +359,7 @@ class RegisterPageView extends StatelessWidget {
                                 CustomTextField(
                                   controller: pinCodeController,
                                   hintText: l10n.enterYourPinCode,
-                                  autofocus: true,
-                                  isReadOnly: true,
+                                  validator: validatePinCode,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -335,8 +372,7 @@ class RegisterPageView extends StatelessWidget {
                                 CustomTextField(
                                   controller: annualIncomeController,
                                   hintText: l10n.enterYourAnnualIncome,
-                                  autofocus: true,
-                                  isReadOnly: true,
+                                  validator: validateAnnualIncome,
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -349,8 +385,6 @@ class RegisterPageView extends StatelessWidget {
                                 CustomTextField(
                                   controller: alertNateNumberController,
                                   hintText: l10n.enterYourOptionalNumber,
-                                  autofocus: true,
-                                  isReadOnly: true,
                                 ),
                                 const Gap(20),
                                 CustomText(
@@ -362,21 +396,21 @@ class RegisterPageView extends StatelessWidget {
                                 const Gap(5),
                                 Row(
                                   children: [
-                                    Radio<bool>(
-                                      value: true,
+                                    Radio<String>(
+                                      value: "Yes",
                                       activeColor: Colors.blue,
                                       groupValue: state.isPhysicallyHandicapped,
-                                      onChanged: (bool? value) {
-                                        context.read<RegisterPageCubit>().selectedPhysicallyHandicapped(value);
+                                      onChanged: (value) {
+                                        context.read<RegisterPageCubit>().selectedPhysicallyHandicapped(value!);
                                       },
                                     ),
                                     const Text('Yes'),
-                                    Radio<bool>(
-                                      value: false,
+                                    Radio<String>(
+                                      value: "No",
                                       activeColor: Colors.blue,
                                       groupValue: state.isPhysicallyHandicapped,
-                                      onChanged: (bool? value) {
-                                        context.read<RegisterPageCubit>().selectedPhysicallyHandicapped(value);
+                                      onChanged: (value) {
+                                        context.read<RegisterPageCubit>().selectedPhysicallyHandicapped(value!);
                                       },
                                     ),
                                     const Text('No'),
@@ -439,38 +473,50 @@ class RegisterPageView extends StatelessWidget {
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        globalKey.currentState!.validate();
-                        UserModal user = UserModal(
-                          studentName: 'vikas',
-                          email: 'nikunjparmar446@gmail.com',
-                          password: '12345',
-                          phoneNo: 9265456440,
-                          courseName: 'CIVIL ENGINEERING',
-                          meritRank: 58,
-                          fatherName: 'Atulbhai',
-                          motherName: 'Dipaben',
-                          cast: 'open',
-                          city: 'Surat',
-                          country: 'India',
-                          address: '33,ranchhod nagar',
-                          pinCode: 395006,
-                          familyAnnualIncome: '18Lakh',
-                          physicallyHandicapped: 'no',
-                          gender: 'Male',
-                          dateOfBirth: '07-11-2001',
-                          alternatePhoneNo: null,
-                          confirmPassword: '12345',
-                        );
-                        context.read<RegisterPageCubit>().registerUser(user);
-                      },
-                      child: Text(l10n.register),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (globalKey.currentState!.validate()) {
+                            UserModal user = UserModal(
+                              studentName: studentNameController.text,
+                              email: emailController.text,
+                              password: passwordController.text,
+                              phoneNo: int.parse(mobileController.text),
+                              courseName: selectedCourseController.text,
+                              meritRank: int.parse(meritRankController.text),
+                              fatherName: fatherController.text,
+                              motherName: motherController.text,
+                              cast: castController.text,
+                              city: cityController.text,
+                              country: countryController.text,
+                              address: addressController.text,
+                              pinCode: int.parse(pinCodeController.text),
+                              familyAnnualIncome: annualIncomeController.text,
+                              physicallyHandicapped: state.isPhysicallyHandicapped,
+                              gender: state.selectedGender!,
+                              dateOfBirth: state.selectedDateOfBirth.toString(),
+                              alternatePhoneNo: null,
+                              confirmPassword: confirmPasswordController.text,
+                            );
+                            context.read<RegisterPageCubit>().registerUser(user, emailController.text.trim());
+                          }
+                        },
+                        child: Center(
+                          child: state.isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  l10n.register,
+                                ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

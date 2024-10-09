@@ -49,9 +49,93 @@ String? validateNumber(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return 'Please enter a number'; // Customize error message
+  } else if (value.length < 10) {
+    return 'Mobile no length mini 10';
   }
   if (!AppConstants.numberRegExp.hasMatch(value)) {
     return 'Invalid number format'; // Customize error message
+  }
+  return null;
+}
+
+String? validateCourseName(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return CMLocalizations.current.errorCourseNameEmpty;
+    return null;
+  }
+  return null;
+}
+
+String? validateMeritRank(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return CMLocalizations.current.errorMeritRankEmpty;
+    return null;
+  }
+  return null;
+}
+
+String? validateCast(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return CMLocalizations.current.errorCastEmpty;
+    return null;
+  }
+  return null;
+}
+
+String? validateCityName(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return CMLocalizations.current.errorCityNameEmpty;
+    return null;
+  }
+  return null;
+}
+
+String? validateCountryName(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return CMLocalizations.current.errorCountryNameEmpty;
+    return null;
+  }
+  return null;
+}
+
+String? validateAddress(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return CMLocalizations.current.errorAddressEmpty;
+    return null;
+  }
+  return null;
+}
+
+String? validatePinCode(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return CMLocalizations.current.errorPinCodeEmpty;
+    return null;
+  }
+  return null;
+}
+
+String? validateAnnualIncome(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return CMLocalizations.current.errorAnnualIncomeEmpty;
+    return null;
+  }
+  return null;
+}
+
+String? validateOtp(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return 'Please enter OTP';
+  } else if (value.length != 6) {
+    return 'OTP length must be 6';
   }
   return null;
 }
