@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/ui/auth/login/login_page_view.dart';
+import 'package:college_management_app/src/ui/auth/uploadDocument/upload_document_view.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
@@ -29,18 +30,20 @@ class RegistrationVerificationCubit extends Cubit<RegistrationVerificationState>
       Log.info(response);
       if (response.statusCode == 200) {
         Log.success("Otp Verification Success");
+
+        final userId = response.data['data']['_id'];
+        Log.debug("UserId ::: $userId");
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
-            LoginPageView.routeName,
-            (route) => false,
+            UploadDocumentView.routeName,
+            arguments: {'_id': userId},
+            (route) => true,
           );
         }
       } else {
-        // Handle error
         Log.error("Invalid Otp");
       }
     } catch (e) {
-      // Handle exception
       Log.error("Error verify: $e");
     }
   }

@@ -1,4 +1,6 @@
 import 'package:college_management_app/src/interceptor/input_filed.dart';
+import 'package:college_management_app/src/ui/auth/forgotPassword/forgot_password_view.dart';
+import 'package:college_management_app/src/ui/auth/register/register_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -72,7 +74,28 @@ class LoginPageView extends StatelessWidget {
                   validator: validatePassword,
                   hintText: l10n.enterYourPassword,
                 ),
-                const Gap(50),
+                const Gap(10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          RegisterPageView.routeName,
+                          (route) => true,
+                        );
+                      },
+                      child: const Text("RegisterUser?"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed(ForgotPasswordView.routeName);
+                      },
+                      child: const Text("forgotPassword?"),
+                    ),
+                  ],
+                ),
+                const Gap(20),
                 Center(
                   child: SizedBox(
                     width: double.infinity,

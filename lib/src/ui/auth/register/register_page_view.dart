@@ -63,19 +63,21 @@ class _RegisterPageViewState extends State<RegisterPageView> {
     return BlocBuilder<RegisterPageCubit, RegisterPageState>(
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(
+            title: CustomText(
+              title: l10n.studentRegistration,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.blue,
+          ),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: CustomText(
-                      title: l10n.studentRegistration,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   Expanded(
                     child: Form(
                       key: globalKey,
@@ -234,8 +236,12 @@ class _RegisterPageViewState extends State<RegisterPageView> {
                                                   );
                                                 }).toList(),
                                               );
+                                            } else if (state.isLoading) {
+                                              return const Center(
+                                                child: CircularProgressIndicator(),
+                                              );
                                             } else {
-                                              return const Center(child: CircularProgressIndicator());
+                                              return const SizedBox.shrink();
                                             }
                                           },
                                         ),
