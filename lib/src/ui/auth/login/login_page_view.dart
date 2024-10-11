@@ -71,7 +71,7 @@ class LoginPageView extends StatelessWidget {
                 const Gap(5),
                 PasswordTextField(
                   controller: passwordController,
-                  validator: validatePassword,
+                  //  validator: validatePassword,
                   hintText: l10n.enterYourPassword,
                 ),
                 const Gap(10),

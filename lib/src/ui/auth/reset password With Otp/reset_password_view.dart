@@ -143,8 +143,6 @@ class ResetPasswordView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Gap(30),
-                        EmailTextField(controller: emailController),
                         const Gap(20),
                         CustomText(
                           title: l10n.password,
@@ -157,6 +155,7 @@ class ResetPasswordView extends StatelessWidget {
                           controller: passwordController,
                           validator: validatePassword,
                           hintText: l10n.enterYourPassword,
+                          focusNode: FocusNode(),
                         ),
                         const Gap(10),
                         CustomText(

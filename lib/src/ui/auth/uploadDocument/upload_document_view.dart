@@ -28,8 +28,6 @@ class UploadDocumentView extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    //String? userId = ModalRoute.of(context)!.settings.arguments as String?;
-
     final args = ModalRoute.of(context)!.settings.arguments;
     String? userId;
 
@@ -62,18 +60,11 @@ class UploadDocumentView extends StatelessWidget {
                   //     fontSize: 14,
                   //   ),
                   // ),
-                  GestureDetector(
-                    onTap: () {
-                      context.read<UploadDocumentCubit>().pickImage(_csatDocController);
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: _csatDocController,
-                        decoration: const InputDecoration(labelText: 'CSAT Document'),
-                        // onTap: () => context.read<UploadDocumentCubit>().pickImage(_csatDocController),
-                        readOnly: true, // Prevent direct editing
-                      ),
-                    ),
+                  TextFormField(
+                    controller: _csatDocController,
+                    decoration: const InputDecoration(labelText: 'Cast Document'),
+                    onTap: () => context.read<UploadDocumentCubit>().pickImage(_csatDocController),
+                    readOnly: true,
                   ),
                   const Gap(20),
                   TextFormField(
@@ -92,7 +83,7 @@ class UploadDocumentView extends StatelessWidget {
                   const Gap(20),
                   TextFormField(
                     controller: _diplomaLatestMarkSheetController,
-                    decoration: const InputDecoration(labelText: 'Diploma Latest Marksheet'),
+                    decoration: const InputDecoration(labelText: 'Diploma Latest MarkSheet'),
                     onTap: () => context.read<UploadDocumentCubit>().pickImage(_diplomaLatestMarkSheetController),
                     readOnly: true,
                   ),

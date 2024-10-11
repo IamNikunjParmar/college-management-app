@@ -16,7 +16,7 @@ class RegistrationVerification extends StatelessWidget {
   static Widget builder(BuildContext context) {
     return BlocProvider(
       create: (context) => RegistrationVerificationCubit(
-        RegistrationVerificationState(),
+        const RegistrationVerificationState(),
         context: context,
       ),
       child: RegistrationVerification(),
@@ -27,7 +27,7 @@ class RegistrationVerification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String userEmail = ModalRoute.of(context)!.settings.arguments as String;
+    String? userEmail = ModalRoute.of(context)!.settings.arguments as String?;
 
     return BlocBuilder<RegistrationVerificationCubit, RegistrationVerificationState>(
       builder: (context, state) {
@@ -74,7 +74,7 @@ class RegistrationVerification extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      userEmail,
+                      userEmail ?? '',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.blueGrey,
@@ -136,7 +136,9 @@ class RegistrationVerification extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           if (globalKey.currentState!.validate()) {
-                            context.read<RegistrationVerificationCubit>().verifyOtp(userEmail, otpController.text);
+                            context
+                                .read<RegistrationVerificationCubit>()
+                                .verifyOtp(userEmail ?? '', otpController.text);
                           }
                         },
                         child: state.verifyOtp ? const Text("OTP Verified") : const Text('Verify OTP'),

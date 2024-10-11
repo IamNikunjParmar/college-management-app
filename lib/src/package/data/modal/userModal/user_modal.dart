@@ -25,6 +25,11 @@ class UserModal {
   String dateOfBirth;
   String familyAnnualIncome;
   String? alternatePhoneNo;
+  int? status;
+  List<Registrationfees>? registrationfees;
+  List<UplodedDocumnets>? uplodedDocumnets;
+  String? createdAt;
+  String? updatedAt;
 
   UserModal({
     this.alternatePhoneNo,
@@ -46,6 +51,11 @@ class UserModal {
     required this.physicallyHandicapped,
     required this.gender,
     required this.dateOfBirth,
+    this.registrationfees,
+    this.uplodedDocumnets,
+    this.status,
+    this.updatedAt,
+    this.createdAt,
   });
 
   factory UserModal.fromJson(Map<String, dynamic> data) => _$UserModalFromJson(data);
@@ -73,6 +83,11 @@ class UserModal {
         gender,
         dateOfBirth,
         alternatePhoneNo,
+        status,
+        createdAt,
+        updatedAt,
+        uplodedDocumnets,
+        registrationfees,
       ];
 
   UserModal copyWith({
@@ -95,6 +110,11 @@ class UserModal {
     String? dateOfbirth,
     String? familyAnnualIncome,
     String? alternatePhoneNo,
+    int? status,
+    List<Registrationfees>? registrationfees,
+    List<UplodedDocumnets>? uplodedDocumnets,
+    String? createdAt,
+    String? updatedAt,
   }) {
     return UserModal(
       studentName: studentName ?? this.studentName,
@@ -116,8 +136,75 @@ class UserModal {
       gender: gender ?? this.gender,
       dateOfBirth: dateOfbirth ?? this.dateOfBirth,
       alternatePhoneNo: alternatePhoneNo ?? this.alternatePhoneNo,
+      updatedAt: updatedAt ?? this.updatedAt,
+      createdAt: createdAt ?? this.createdAt,
+      status: status ?? this.status,
+      registrationfees: registrationfees ?? this.registrationfees,
+      uplodedDocumnets: uplodedDocumnets ?? this.uplodedDocumnets,
     );
   }
+}
+
+@JsonSerializable()
+class Registrationfees {
+  final String transactionNo;
+  final int transactionAmount;
+  final int paymentStatus;
+  @JsonKey(name: '_id')
+  final String id;
+
+  Registrationfees({
+    required this.transactionNo,
+    required this.transactionAmount,
+    required this.paymentStatus,
+    required this.id,
+  });
+
+  factory Registrationfees.fromJson(Map<String, dynamic> json) => _$RegistrationfeesFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RegistrationfeesToJson(this);
+}
+
+@JsonSerializable()
+class UplodedDocumnets {
+  final String csatDoc;
+  final String studentPhoto;
+  final String dobDoc;
+  final String diplomaLatestMarksheet;
+  final List<Aadharcard> aadharcard;
+  @JsonKey(name: '_id')
+  final String id;
+
+  UplodedDocumnets({
+    required this.csatDoc,
+    required this.studentPhoto,
+    required this.dobDoc,
+    required this.diplomaLatestMarksheet,
+    required this.aadharcard,
+    required this.id,
+  });
+
+  factory UplodedDocumnets.fromJson(Map<String, dynamic> json) => _$UplodedDocumnetsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UplodedDocumnetsToJson(this);
+}
+
+@JsonSerializable()
+class Aadharcard {
+  final String front;
+  final String back;
+  @JsonKey(name: '_id')
+  final String id;
+
+  Aadharcard({
+    required this.front,
+    required this.back,
+    required this.id,
+  });
+
+  factory Aadharcard.fromJson(Map<String, dynamic> json) => _$AadharcardFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AadharcardToJson(this);
 }
 
 /*import 'package:json_annotation/json_annotation.dart';

@@ -8,6 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../ui/auth/verifyOtp/registration_verification.dart';
 
@@ -45,7 +46,6 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
         Log.success("AllCourse : ${newAllCourse.length}");
         emit(state.copyWith(courseList: newAllCourse));
       } else if (response.statusCode == 404) {
-        // Handle 404 error (e.g., show an error message)
         Log.error('API endpoint not found: ${ApiEndPoints.getAllCourse}');
       } else {
         Log.error('Other: ${response.statusCode}');
@@ -68,19 +68,39 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
         data: user.toJson(),
       );
       Log.debug(user.toJson());
+
+      Log.info(response);
+      final msg = response.data['message'];
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         Log.success("User registered successfully");
+        _showToast(msg, Colors.green, Icons.check_circle); // Success toast
         if (context.mounted) {
           Navigator.of(context).pushNamed(RegistrationVerification.routeName, arguments: arguments);
         }
+      } else if (response.statusCode == 409) {
+        Log.error("Registration failed: Email or phone number already exists");
+        _showToast("Email already exists", Colors.red, Icons.error);
       } else {
         Log.error("Registration failed: ${response.statusCode}");
+        _showToast("Registration failed", Colors.red, Icons.error);
         Log.error(response);
       }
     } catch (e) {
       Log.error("Error during registration: $e");
       Log.error(e.toString());
+    } finally {
+      emit(state.copyWith(isLoading: false));
     }
+  }
+
+  void _showToast(String message, Color backgroundColor, IconData icon) {
+    toastification.show(
+      autoCloseDuration: const Duration(seconds: 3),
+      title: Text(message, style: const TextStyle(color: Colors.white)),
+      backgroundColor: backgroundColor,
+      icon: Icon(icon, color: Colors.white, size: 35),
+    );
   }
 
   void selectDateOfBirth(BuildContext context) async {
@@ -95,30 +115,30 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
     emit(state.copyWith(selectedDateOfBirth: date));
   }
 
-  selectWithGender(String value) {
+  void selectWithGender(String value) {
     emit(state.copyWith(selectedGender: value));
   }
 
-  selectedPhysicallyHandicapped(String value) {
+  void selectedPhysicallyHandicapped(String value) {
     emit(state.copyWith(isPhysicallyHandicapped: value));
   }
 
-  selectCourse(String newValue) {
+  void selectCourse(String newValue) {
     emit(state.copyWith(selectCourse: newValue));
   }
 
-  updateStep(int step) {
+  void updateStep(int step) {
     emit(state.copyWith(currentStep: step));
   }
 
-  onStepContinue(int newStep) {
+  void onStepContinue(int newStep) {
     if (state.currentStep != 1) {
       newStep += 1;
       emit(state.copyWith(currentStep: newStep));
     }
   }
 
-  onStepCancel(int newStep) {
+  void onStepCancel(int newStep) {
     if (state.currentStep > 0) {
       newStep -= 1;
       emit(state.copyWith(currentStep: newStep));

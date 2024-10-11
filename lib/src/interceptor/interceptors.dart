@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../package/resorces/appConstance.dart';
 
@@ -13,12 +14,13 @@ class DioInterceptors extends Interceptor {
     _dio = Dio(
       BaseOptions(
         baseUrl: AppConstants.baseUrl,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 9),
         validateStatus: (statusCode) {
           if (statusCode == null) {
             return false;
           }
           if (statusCode == 422) {
-            // your http status code
             return true;
           } else {
             return statusCode >= 200 && statusCode < 300;
@@ -29,7 +31,10 @@ class DioInterceptors extends Interceptor {
 
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
+        onRequest: (options, handler) async {
+          final prefs = await SharedPreferences.getInstance();
+          final token = prefs.getString('token');
+          options.headers['Authorization'] = 'Bearer $token';
           return handler.next(options);
         },
         onResponse: (response, handler) {

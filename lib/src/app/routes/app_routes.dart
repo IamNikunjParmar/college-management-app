@@ -1,6 +1,7 @@
 import 'package:college_management_app/demo_home.dart';
 import 'package:college_management_app/src/ui/auth/forgotPassword/forgot_password_view.dart';
 import 'package:college_management_app/src/ui/auth/login/login_page_view.dart';
+import 'package:college_management_app/src/ui/auth/registration%20fee%20payment/registration_fee_payment.dart';
 import 'package:college_management_app/src/ui/auth/reset%20password%20With%20Otp/reset_password_view.dart';
 import 'package:college_management_app/src/ui/auth/uploadDocument/upload_document_view.dart';
 import 'package:college_management_app/src/ui/auth/verifyOtp/registration_verification.dart';
@@ -17,5 +18,6 @@ class AppRoutes {
         ForgotPasswordView.routeName: ForgotPasswordView.builder,
         ResetPasswordView.routeName: ResetPasswordView.builder,
         UploadDocumentView.routeName: UploadDocumentView.builder,
+        RegistrationFeePayment.routeName: RegistrationFeePayment.builder,
       };
 }

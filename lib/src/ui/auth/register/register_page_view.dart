@@ -122,6 +122,7 @@ class _RegisterPageViewState extends State<RegisterPageView> {
                                   controller: studentNameController,
                                   hintText: l10n.enterYourName,
                                   validator: validateFullName,
+                                  focusNode: FocusNode(),
                                 ),
                                 const Gap(10),
                                 CustomText(
@@ -187,7 +188,9 @@ class _RegisterPageViewState extends State<RegisterPageView> {
                                 const Gap(5),
                                 TextFormField(
                                   controller: selectedCourseController,
+                                  focusNode: FocusNode(),
                                   validator: validateCourseName,
+                                  onTapOutside: (event) => FocusScope.of(context).unfocus(),
                                   decoration: InputDecoration(
                                     hintText: l10n.selectCourse,
                                     suffixIcon: DropdownButtonHideUnderline(
@@ -283,7 +286,6 @@ class _RegisterPageViewState extends State<RegisterPageView> {
                                 const Gap(5),
                                 CustomTextField(
                                   hintText: l10n.enterYourFatherName,
-                                  autofocus: true,
                                   controller: fatherController,
                                   validator: validateFullName,
                                 ),
@@ -297,7 +299,6 @@ class _RegisterPageViewState extends State<RegisterPageView> {
                                 const Gap(5),
                                 CustomTextField(
                                   hintText: l10n.enterYourMotherName,
-                                  autofocus: true,
                                   controller: motherController,
                                   validator: validateFullName,
                                 ),
@@ -310,7 +311,6 @@ class _RegisterPageViewState extends State<RegisterPageView> {
                                 ),
                                 const Gap(5),
                                 CustomTextField(
-                                  autofocus: true,
                                   controller: castController,
                                   hintText: l10n.enterYourCast,
                                   validator: validateCast,
@@ -460,22 +460,39 @@ class _RegisterPageViewState extends State<RegisterPageView> {
                                   colorName: Colors.blue,
                                 ),
                                 const Gap(5),
-                                SizedBox(
-                                  width: 400,
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue)),
-                                    onPressed: () {
-                                      context.read<RegisterPageCubit>().selectDateOfBirth(context);
-                                    },
+                                GestureDetector(
+                                  onTap: () {
+                                    context.read<RegisterPageCubit>().selectDateOfBirth(context);
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 120,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                          color: Colors.blue,
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            offset: Offset(3, 3),
+                                            blurRadius: 5,
+                                          ),
+                                        ]),
                                     child: Text(
-                                      state.selectedDateOfBirth == null
-                                          ? 'Select Date of Birth'
-                                          : '${state.selectedDateOfBirth}',
-                                      style: const TextStyle(color: Colors.white),
+                                      state.selectedDateOfBirth == null ? 'Select DOB' : '${state.selectedDateOfBirth}',
+                                      style: const TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ),
@@ -514,13 +531,9 @@ class _RegisterPageViewState extends State<RegisterPageView> {
                           }
                         },
                         child: Center(
-                          child: state.isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                              : Text(
-                                  l10n.register,
-                                ),
+                          child: Text(
+                            l10n.register,
+                          ),
                         ),
                       ),
                     ),
