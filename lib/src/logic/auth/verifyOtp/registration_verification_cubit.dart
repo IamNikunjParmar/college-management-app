@@ -5,6 +5,7 @@ import 'package:college_management_app/src/ui/auth/uploadDocument/upload_documen
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../package/utils/logger.dart';
@@ -34,7 +35,10 @@ class RegistrationVerificationCubit extends Cubit<RegistrationVerificationState>
         Log.success("Otp Verification Success");
         _showToast(msg, Colors.green, Icons.check_circle);
         final userId = response.data['data']['_id'];
-        Log.debug("UserId ::: $userId");
+
+        // id store for sharePreSharedPreferences
+        // final prefs = await SharedPreferences.getInstance();
+        // await prefs.setString('userId', userId);
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             UploadDocumentView.routeName,

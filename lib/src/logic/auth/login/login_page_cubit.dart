@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
+import 'package:college_management_app/src/ui/auth/home/home_page_view.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,10 @@ import 'package:toastification/toastification.dart';
 part 'login_page_state.dart';
 
 class LoginPageCubit extends Cubit<LoginPageState> {
-  LoginPageCubit() : super(const LoginPageState());
+  LoginPageCubit(super.initialState, {required this.context}) {}
 
   final DioInterceptors dio = DioInterceptors();
+  final BuildContext context;
 
   Future<void> loginUser(String email, String password) async {
     try {
@@ -26,14 +28,21 @@ class LoginPageCubit extends Cubit<LoginPageState> {
         'password': password,
       });
       Log.info(response);
-
       final msg = response.data['message'];
       if (response.statusCode == 200) {
         Log.success("Login successfully");
+
         final prefs = await SharedPreferences.getInstance();
-        prefs.setString("token", response.data['token']);
-        Log.info(prefs);
+        String token = response.data['token'];
+        await prefs.setString("token", token);
+
         _showToast(msg, Colors.green, Icons.check_circle);
+        if (context.mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            HomePageView.routeName,
+            (route) => false,
+          );
+        }
       } else {
         Log.error("Invalid email or password");
         _showToast(msg, Colors.red, Icons.error);
@@ -53,3 +62,5 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     );
   }
 }
+
+// nikunjparmar5066@gmail.com

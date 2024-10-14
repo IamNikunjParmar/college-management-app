@@ -1,9 +1,9 @@
-import 'package:college_management_app/demo_home.dart';
 import 'package:college_management_app/src/app/routes/app_routes.dart';
 import 'package:college_management_app/src/localization/generated/l10n.dart';
 import 'package:college_management_app/src/logic/auth/register/register_page_cubit.dart';
 import 'package:college_management_app/src/package/utils/theme.dart';
 import 'package:college_management_app/src/ui/auth/forgotPassword/forgot_password_view.dart';
+import 'package:college_management_app/src/ui/auth/home/home_page_view.dart';
 import 'package:college_management_app/src/ui/auth/login/login_page_view.dart';
 import 'package:college_management_app/src/ui/auth/register/register_page_view.dart';
 import 'package:college_management_app/src/ui/auth/registration%20fee%20payment/registration_fee_payment.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         routes: AppRoutes.myRoutes,
-        initialRoute: LoginPageView.routeName,
+        initialRoute: HomePageView.routeName,
       ),
     );
   }

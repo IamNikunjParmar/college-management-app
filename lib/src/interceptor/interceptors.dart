@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../package/resorces/appConstance.dart';
+import '../package/utils/logger.dart';
 
 class DioInterceptors extends Interceptor {
   late Dio _dio;
@@ -33,7 +34,7 @@ class DioInterceptors extends Interceptor {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final prefs = await SharedPreferences.getInstance();
-          final token = prefs.getString('token');
+          final token = prefs.getString("token");
           options.headers['Authorization'] = 'Bearer $token';
           return handler.next(options);
         },
@@ -62,6 +63,22 @@ class DioInterceptors extends Interceptor {
       return await _dio.post(endpoint, data: data);
     } on DioException catch (e) {
       throw Exception('Failed to Make API Call: $e');
+    }
+  }
+
+  Future<Response> patch(String endpoint, {Map<String, dynamic>? data}) async {
+    try {
+      return await _dio.patch(endpoint, data: data);
+    } on DioException catch (e) {
+      throw Exception('Failed to Make API Call $e');
+    }
+  }
+
+  Future<Response> delete(String endpoint, {Map<String, dynamic>? data}) async {
+    try {
+      return await _dio.delete(endpoint, data: data);
+    } on DioException catch (e) {
+      throw Exception('Failed to Make API Call $e');
     }
   }
 }

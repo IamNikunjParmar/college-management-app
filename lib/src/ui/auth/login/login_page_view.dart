@@ -19,7 +19,10 @@ class LoginPageView extends StatelessWidget {
 
   static Widget builder(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginPageCubit(),
+      create: (context) => LoginPageCubit(
+        const LoginPageState(),
+        context: context,
+      ),
       child: LoginPageView(),
     );
   }
