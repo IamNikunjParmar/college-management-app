@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:college_management_app/src/interceptor/input_filed.dart';
 import 'package:college_management_app/src/package/data/modal/getCourseModal/get_course_modal.dart';
 import 'package:college_management_app/src/package/utils/images_utils.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
+import 'package:college_management_app/src/ui/auth/student%20Select%20Course/select_course.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -12,12 +14,10 @@ import '../../../logic/auth/home/home_page_cubit.dart';
 import '../../../package/helper/validator.dart';
 import '../profile/profile_page_view.dart';
 
-class HomePageView extends StatelessWidget {
+class HomePageView extends StatefulWidget {
   static const String routeName = '/home_page_view';
 
-  HomePageView({super.key});
-
-  final TextEditingController selectedCourseController = TextEditingController();
+  const HomePageView({super.key});
 
   static Widget builder(BuildContext context) {
     return BlocProvider(
@@ -30,7 +30,18 @@ class HomePageView extends StatelessWidget {
   }
 
   @override
+  State<HomePageView> createState() => _HomePageViewState();
+}
+
+class _HomePageViewState extends State<HomePageView> {
+  final TextEditingController selectDateController = TextEditingController();
+  final TextEditingController roundController = TextEditingController();
+
+  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+
+  @override
   Widget build(BuildContext context) {
+    GetCourseModal? newCourseId = ModalRoute.of(context)!.settings.arguments as GetCourseModal?;
     final l10n = CMLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -68,143 +79,117 @@ class HomePageView extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        context.read<HomePageCubit>().getCourseList();
-                      },
-                      child: const Text("click")),
-                  const Gap(10),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text("deleteUser"),
-                  ),
-                  const Gap(15),
-                  TextFormField(
-                    controller: selectedCourseController,
-                    focusNode: FocusNode(),
-                    validator: validateCourseName,
-                    onTapOutside: (event) => FocusScope.of(context).unfocus(),
-                    decoration: InputDecoration(
-                      hintText: l10n.selectCourse,
-                      suffixIcon: DropdownButtonHideUnderline(
-                        child: SizedBox(
-                          width: 100,
-                          child: DropdownButton(
-                              isExpanded: true,
-                              value: state.courseList.length,
-                              // Use selectedCourse instead of mapping
-                              iconEnabledColor: Colors.blue,
-                              menuMaxHeight: 400,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10),
+              child: Form(
+                key: globalKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Select Course",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Gap(15),
+                    Container(
+                      height: 400,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.25),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomSelectCourse(
+                                text: newCourseId?.courseName ?? 'select Your Course',
+                                onTap: () {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    SelectCourseView.routeName,
+                                    (route) => true,
+                                  );
+                                },
                               ),
-                              iconSize: 30,
-                              onChanged: (newValue) {
-                                selectedCourseController.text = newValue!;
-                                context.read<HomePageCubit>().selectCourse(newValue);
-                              },
-                              icon: const Icon(Icons.arrow_drop_down),
-                              style: const TextStyle(color: Colors.black),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.blue,
+                              const Gap(10),
+                              const Text(
+                                "Round",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                              // selectedItemBuilder: (BuildContext context) {
-                              //   return state.courseList.map((e) {
-                              //     Log.success("=========================");
-                              //     Log.error(e);
-                              //     Log.success("=========================");
-                              //     return Padding(
-                              //       padding: const EdgeInsets.only(left: 15),
-                              //       child: Text(e.courseName),
-                              //     );
-                              //   }).toList();
-                              // },
-                              // items: state.courseList.map((GetCourseModal course) {
-                              //   return DropdownMenuItem<String>(
-                              //     alignment: Alignment.centerLeft,
-                              //     value: course.courseName, // Use courseName as the unique value
-                              //     child: Padding(
-                              //       padding: const EdgeInsets.only(left: 15),
-                              //       child: Text(course.courseName),
-                              //     ),
-                              //   );
-                              // }).toList(),
-                              items: [
-                                DropdownMenuItem(child: Text("data")),
-                                DropdownMenuItem(child: Text("data")),
-                                DropdownMenuItem(child: Text("data")),
-                                DropdownMenuItem(child: Text("data")),
-                                DropdownMenuItem(child: Text("data")),
-                                DropdownMenuItem(child: Text("data")),
-                              ]),
+                              CustomTextField(
+                                controller: roundController,
+                                hintText: 'Enter your Round',
+                                validator: validateRound,
+                              ),
+                              const Gap(10),
+                              const Text(
+                                "Date",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const Gap(10),
+                              GestureDetector(
+                                onTap: () {
+                                  context.read<HomePageCubit>().selectDate(context);
+                                },
+                                child: Container(
+                                  height: 55,
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(12),
+                                  alignment: Alignment.topLeft,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.blue,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    state.selectedDate == null ? 'Select Date' : '${state.selectedDate}',
+                                    style: TextStyle(
+                                      color: state.selectedDate == null ? Colors.grey : Colors.blue,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Gap(30),
+                              Align(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (globalKey.currentState!.validate()) {
+                                      String id = newCourseId?.id ?? '';
+                                      Log.info(id);
+                                      context.read<HomePageCubit>().studentSelectCourse(
+                                            id,
+                                            int.parse(roundController.text),
+                                            state.selectedDate.toString(),
+                                          );
+                                    }
+                                  },
+                                  child: const Text("Continue"),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    // ... other properties ...
-                  ),
-                  // TextFormField(
-                  //   controller: selectedCourseController,
-                  //   focusNode: FocusNode(),
-                  //   validator: validateCourseName,
-                  //   onTapOutside: (event) => FocusScope.of(context).unfocus(),
-                  //   decoration: InputDecoration(
-                  //     hintText: l10n.selectCourse,
-                  //     suffixIcon: DropdownButtonHideUnderline(
-                  //       child: SizedBox(
-                  //         width: state.selectCourse == null ? 200 : 400,
-                  //         child: DropdownButton<String>(
-                  //           isExpanded: true,
-                  //           value: state.courseList.map((e) => e.courseName).toString(),
-                  //           iconEnabledColor: Colors.blue,
-                  //           menuMaxHeight: 400,
-                  //           borderRadius: const BorderRadius.all(
-                  //             Radius.circular(10),
-                  //           ),
-                  //           //menuWidth: 400,
-                  //           iconSize: 30,
-                  //           onChanged: (newValue) {
-                  //             selectedCourseController.text = newValue!;
-                  //             context.read<HomePageCubit>().selectCourse(newValue);
-                  //           },
-                  //           icon: const Icon(Icons.arrow_drop_down),
-                  //           style: const TextStyle(color: Colors.black),
-                  //           underline: Container(
-                  //             height: 2,
-                  //             color: Colors.blue,
-                  //           ),
-                  //           selectedItemBuilder: (BuildContext context) {
-                  //             return state.courseList.map((e) {
-                  //               return Padding(
-                  //                 padding: const EdgeInsets.only(left: 15),
-                  //                 child: Text(e.courseName),
-                  //               );
-                  //             }).toList();
-                  //           },
-                  //           items: state.courseList.map<DropdownMenuItem<String>>((GetCourseModal course) {
-                  //             Log.debug(course);
-                  //             return DropdownMenuItem<String>(
-                  //               alignment: Alignment.centerLeft,
-                  //               value: state.courseList
-                  //                   .map(
-                  //                     (e) => e.courseName,
-                  //                   )
-                  //                   .toString(),
-                  //               child: Padding(
-                  //                 padding: const EdgeInsets.only(left: 15),
-                  //                 child: Text(course.courseName),
-                  //               ),
-                  //             );
-                  //           }).toList(),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  //   // ... other properties ...
-                  // ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -213,75 +198,43 @@ class HomePageView extends StatelessWidget {
     );
   }
 }
-/*Expanded(
-              child: BlocBuilder<HomePageCubit, HomePageState>(
-                builder: (context, state) {
-                  return ListView.builder(
-                      itemCount: state.courseList.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 5,
-                          margin: const EdgeInsets.only(top: 15),
-                          child: Text(state.courseList[index].id),
-                        );
-                      });
-                },
-              ),
-            ),*/
 
-/*BlocBuilder<HomePageCubit, HomePageState>(
-                            builder: (context, state) {
-                              if (state.courseList.isNotEmpty) {
-                                return DropdownButton<String>(
-                                  isExpanded: true,
-                                  value: state.courseList.map((e) => e.courseName).toString(),
-                                  iconEnabledColor: Colors.blue,
-                                  menuMaxHeight: 400,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  //menuWidth: 400,
-                                  iconSize: 30,
-                                  onChanged: (newValue) {
-                                    selectedCourseController.text = newValue!;
-                                    context.read<HomePageCubit>().selectCourse(newValue);
-                                  },
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  style: const TextStyle(color: Colors.black),
-                                  underline: Container(
-                                    height: 2,
-                                    color: Colors.blue,
-                                  ),
-                                  selectedItemBuilder: (BuildContext context) {
-                                    return state.courseList.map((e) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(left: 15),
-                                        child: Text(e.courseName),
-                                      );
-                                    }).toList();
-                                  },
-                                  items: state.courseList.map<DropdownMenuItem<String>>((GetCourseModal course) {
-                                    Log.debug(course);
-                                    return DropdownMenuItem<String>(
-                                      alignment: Alignment.centerLeft,
-                                      value: state.courseList
-                                          .map(
-                                            (e) => e.courseName,
-                                          )
-                                          .toString(),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 15),
-                                        child: Text(course.courseName),
-                                      ),
-                                    );
-                                  }).toList(),
-                                );
-                              } else if (state.isLoading) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            },
-                          ),*/
+class CustomSelectCourse extends StatelessWidget {
+  final String? text;
+  final void Function()? onTap;
+  const CustomSelectCourse({super.key, this.text, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Gap(10),
+        const Text(
+          "Select Course",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const Gap(5),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.all(12),
+            height: 55,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            child: Text(text!),
+          ),
+        ),
+      ],
+    );
+  }
+}

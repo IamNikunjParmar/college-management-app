@@ -20,6 +20,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   final BuildContext context;
 
   Future<void> loginUser(String email, String password) async {
+    String? msg;
     try {
       Log.info("Enter");
       emit(state.copyWith(verifyEmail: true));
@@ -28,15 +29,15 @@ class LoginPageCubit extends Cubit<LoginPageState> {
         'password': password,
       });
       Log.info(response);
-      final msg = response.data['message'];
+      msg = response.data['message'];
       if (response.statusCode == 200) {
         Log.success("Login successfully");
 
+        //Store for SharedPreferences with token
         final prefs = await SharedPreferences.getInstance();
         String token = response.data['token'];
         await prefs.setString("token", token);
-
-        _showToast(msg, Colors.green, Icons.check_circle);
+        _showToast(msg ?? 'success', Colors.green, Icons.check_circle);
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             HomePageView.routeName,
@@ -45,10 +46,11 @@ class LoginPageCubit extends Cubit<LoginPageState> {
         }
       } else {
         Log.error("Invalid email or password");
-        _showToast(msg, Colors.red, Icons.error);
+        _showToast(msg ?? 'Invalid email or password', Colors.red, Icons.error);
       }
     } catch (e) {
       Log.error("Error during login: $e");
+      _showToast(msg ?? 'An error occurred', Colors.red, Icons.error);
       Log.info(e.toString());
     }
   }

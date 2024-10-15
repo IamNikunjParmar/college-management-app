@@ -139,3 +139,17 @@ String? validateOtp(String? value) {
   }
   return null;
 }
+
+String? validateRound(String? value) {
+  value = value?.trim() ?? "";
+  if (value.isEmpty) {
+    return 'Please enter round';
+  }
+
+  // Check if the value can be parsed as an integer
+  if (int.tryParse(value) == null) {
+    return 'Round must be an integer';
+  }
+
+  return null;
+}

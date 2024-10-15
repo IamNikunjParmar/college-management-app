@@ -9,64 +9,85 @@ import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 
 part 'home_page_state.dart';
 
 class HomePageCubit extends Cubit<HomePageState> {
   HomePageCubit(super.initialState, {required this.context}) {
-    getCourseList();
+    getOneUserData();
   }
 
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();
 
-  getOneUserData() {}
-
-  Future<void> getCourseList() async {
+  Future<void> getOneUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('_id');
     try {
-      final response = await dio.get(ApiEndPoints.getCourseList);
-      List data = (response.data['data'] as List);
-      List<GetCourseModal> newData = data.map((e) => GetCourseModal.fromJson(e)).toList();
-      emit(state.copyWith(courseList: newData));
+      final apiEndpoint = '${ApiEndPoints.getOneUser}?${Uri(queryParameters: {'id': id}).query}';
+      final response = await dio.get(apiEndpoint);
+      Log.error(apiEndpoint);
+      Log.info(response);
+      List user = (response.data);
+      List<UserModal> newUser = user.map((e) => UserModal.fromJson(e)).toList();
+      emit(state.copyWith(userData: newUser));
+      Log.debug(newUser);
     } catch (e) {
-      Log.error(e.toString());
+      Log.error(e);
     }
   }
 
-  void selectCourse(String newValue) {
-    emit(state.copyWith(selectCourse: newValue));
-  }
+  Future<void> studentSelectCourse(String courseId, int round, String todayDate) async {
+    String? msg;
+    try {
+      final response = await dio.post(
+        ApiEndPoints.studentSelectCourse,
+        data: {
+          'courseId': courseId,
+          'round': round,
+          'todayDate': todayDate,
+        },
+      );
+      msg = response.data['message'];
+      final courseIdMsg = response.data['courseId'];
+      var toastMsg = courseIdMsg;
+      toastMsg = 'please select Your Course';
 
-// deleteUserAccount() async {
-//   try {
-//     final response = await dio.delete(ApiEndPoints.deleteUserAccount, data: {});
-//   } catch (e) {}
-// }
-}
-
-/*
-Future<void> getCourseList() async {
-  try {
-    final response = await dio.get(ApiEndPoints.getCourseList);
-
-    // Check if 'data' is present and is alist
-    if (response.data['data'] != null && response.data['data'] is List) {
-      List data = response.data['data'] as List;
-      List<GetCourseModal> newData = data.map((e) => GetCourseModal.fromJson(e)).toList();
-      Log.error(newData);
-      emit(state.copyWith(courseList: newData));
-    } else {
-      // Handle unexpected response format
-      Log.warning("Unexpected course list data format");
-      emit(state.copyWith(courseList: [])); // Assign an empty listto courseList
+      if (response.statusCode == 200) {
+        Log.success('Course selected successfully!');
+        _showToast(msg ?? 'success', Colors.green, Icons.check_circle);
+      } else {
+        Log.error('Failed to select course: ${response.statusCode}');
+        _showToast(toastMsg, Colors.red, Icons.error);
+      }
+    } catch (e) {
+      Log.error('Exception during course selection: $e');
+      _showToast(msg ?? 'An error occurred', Colors.red, Icons.error);
     }
-  } catch (e) {
-    Log.success("==============================================");
-    Log.error(e.toString());
-    Log.success("==============================================");
-    // Handle other errors
-    emit(state.copyWith(courseList: [])); // Assign an empty list in case of error
+  }
+
+  void selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    String date = DateFormat('dd-MM-yyyy').format(pickedDate!);
+    Log.success(date);
+    emit(state.copyWith(selectedDate: date));
+  }
+
+  void _showToast(String message, Color backgroundColor, IconData icon) {
+    toastification.show(
+      autoCloseDuration: const Duration(seconds: 3),
+      title: Text(message, style: const TextStyle(color: Colors.white)),
+      backgroundColor: backgroundColor,
+      icon: Icon(icon, color: Colors.white, size: 35),
+    );
   }
 }
-*/
