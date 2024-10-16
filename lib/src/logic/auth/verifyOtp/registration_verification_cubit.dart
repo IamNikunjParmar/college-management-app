@@ -35,9 +35,6 @@ class RegistrationVerificationCubit extends Cubit<RegistrationVerificationState>
         Log.success("Otp Verification Success");
         _showToast(msg, Colors.green, Icons.check_circle);
         final userId = response.data['data']['_id'];
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString('_id', userId);
-
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             UploadDocumentView.routeName,

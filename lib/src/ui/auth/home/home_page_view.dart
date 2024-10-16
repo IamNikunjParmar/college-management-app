@@ -1,13 +1,16 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:college_management_app/src/interceptor/input_filed.dart';
 import 'package:college_management_app/src/package/data/modal/getCourseModal/get_course_modal.dart';
+import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/images_utils.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:college_management_app/src/ui/auth/student%20Select%20Course/select_course.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../localization/generated/l10n.dart';
 import '../../../logic/auth/home/home_page_cubit.dart';
@@ -24,8 +27,8 @@ class HomePageView extends StatefulWidget {
       create: (context) => HomePageCubit(
         const HomePageState(),
         context: context,
-      ),
-      child: HomePageView(),
+      )..getOneUserData(),
+      child: const HomePageView(),
     );
   }
 
@@ -43,158 +46,174 @@ class _HomePageViewState extends State<HomePageView> {
   Widget build(BuildContext context) {
     GetCourseModal? newCourseId = ModalRoute.of(context)!.settings.arguments as GetCourseModal?;
     final l10n = CMLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text("Home Page"),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  ProfilePageView.routeName,
-                  (route) => true,
-                );
-              },
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  image: DecorationImage(
-                    image: AssetImage(ImagePath.profilePic),
-                    fit: BoxFit.contain,
+    return BlocBuilder<HomePageCubit, HomePageState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.blue,
+            title: Text(state.userData?.studentName ?? ""),
+            centerTitle: true,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      ProfilePageView.routeName,
+                      (route) => true,
+                      arguments: state.userData,
+                    );
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: Image.asset(ImagePath.profilePic),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-      body: BlocBuilder<HomePageCubit, HomePageState>(
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: SingleChildScrollView(
-              child: Form(
-                key: globalKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Select Course",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const Gap(15),
-                    Container(
-                      height: 400,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.25),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomSelectCourse(
-                                text: newCourseId?.courseName ?? 'select Your Course',
-                                onTap: () {
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                    SelectCourseView.routeName,
-                                    (route) => true,
-                                  );
-                                },
-                              ),
-                              const Gap(10),
-                              const Text(
-                                "Round",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              CustomTextField(
-                                controller: roundController,
-                                hintText: 'Enter your Round',
-                                validator: validateRound,
-                              ),
-                              const Gap(10),
-                              const Text(
-                                "Date",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const Gap(10),
-                              GestureDetector(
-                                onTap: () {
-                                  context.read<HomePageCubit>().selectDate(context);
-                                },
-                                child: Container(
-                                  height: 55,
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(12),
-                                  alignment: Alignment.topLeft,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.blue,
-                                    ),
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    state.selectedDate == null ? 'Select Date' : '${state.selectedDate}',
-                                    style: TextStyle(
-                                      color: state.selectedDate == null ? Colors.grey : Colors.blue,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const Gap(30),
-                              Align(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (globalKey.currentState!.validate()) {
-                                      String id = newCourseId?.id ?? '';
-                                      Log.info(id);
-                                      context.read<HomePageCubit>().studentSelectCourse(
-                                            id,
-                                            int.parse(roundController.text),
-                                            state.selectedDate.toString(),
-                                          );
-                                    }
-                                  },
-                                  child: const Text("Continue"),
-                                ),
-                              ),
-                            ],
+          body: BlocBuilder<HomePageCubit, HomePageState>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: globalKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Select Course",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ),
+                        const Gap(15),
+                        Container(
+                          height: 400,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.25),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomSelectCourse(
+                                    text: newCourseId?.courseName ?? 'select Your Course',
+                                    onTap: () {
+                                      Navigator.of(context).pushNamedAndRemoveUntil(
+                                        SelectCourseView.routeName,
+                                        (route) => true,
+                                      );
+                                    },
+                                  ),
+                                  const Gap(10),
+                                  const Text(
+                                    "Round",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  CustomTextField(
+                                    controller: roundController,
+                                    hintText: 'Enter your Round',
+                                    validator: validateRound,
+                                  ),
+                                  const Gap(10),
+                                  const Text(
+                                    "Date",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const Gap(10),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.read<HomePageCubit>().selectDate(context);
+                                    },
+                                    child: Container(
+                                      height: 55,
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(12),
+                                      alignment: Alignment.topLeft,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                          color: Colors.blue,
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        state.selectedDate == null ? 'Select Date' : '${state.selectedDate}',
+                                        style: TextStyle(
+                                          color: state.selectedDate == null ? Colors.grey : Colors.blue,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const Gap(30),
+                                  Align(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        if (globalKey.currentState!.validate()) {
+                                          String id = newCourseId?.id ?? '';
+                                          Log.info(id);
+                                          context.read<HomePageCubit>().studentSelectCourse(
+                                                id,
+                                                int.parse(roundController.text),
+                                                state.selectedDate.toString(),
+                                              );
+                                        }
+                                      },
+                                      child: const Text("Continue"),
+                                    ),
+                                  ),
+                                  // ElevatedButton(
+                                  //     onPressed: () async {
+                                  //       final XFile? pickedImage =
+                                  //           await ImagePicker().pickImage(source: ImageSource.gallery);
+                                  //       if (pickedImage != null) {
+                                  //         final imagePath = pickedImage.path;
+                                  //         // final fileName = imagePath.split('/').last; // String file path create
+                                  //
+                                  //         Log.info(imagePath);
+                                  //       } else {
+                                  //         Log.error("PickImageERROR ::: No image selected");
+                                  //       }
+                                  //     },
+                                  //     child: Text("click"))
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -202,6 +221,7 @@ class _HomePageViewState extends State<HomePageView> {
 class CustomSelectCourse extends StatelessWidget {
   final String? text;
   final void Function()? onTap;
+
   const CustomSelectCourse({super.key, this.text, this.onTap});
 
   @override

@@ -25,17 +25,14 @@ class HomePageCubit extends Cubit<HomePageState> {
   final DioInterceptors dio = DioInterceptors();
 
   Future<void> getOneUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? id = prefs.getString('_id');
     try {
-      final apiEndpoint = '${ApiEndPoints.getOneUser}?${Uri(queryParameters: {'id': id}).query}';
-      final response = await dio.get(apiEndpoint);
-      Log.error(apiEndpoint);
-      Log.info(response);
-      List user = (response.data);
-      List<UserModal> newUser = user.map((e) => UserModal.fromJson(e)).toList();
-      emit(state.copyWith(userData: newUser));
-      Log.debug(newUser);
+      final response = await dio.get(ApiEndPoints.getOneUser);
+      if (response.data is Map<String, dynamic>) {
+        final user = UserModal.fromJson(response.data);
+        emit(state.copyWith(userData: user));
+      } else {
+        Log.error('Unexpected response format: ${response.data}');
+      }
     } catch (e) {
       Log.error(e);
     }

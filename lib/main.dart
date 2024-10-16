@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         routes: AppRoutes.myRoutes,
-        initialRoute: LoginPageView.routeName,
+        initialRoute: HomePageView.routeName,
       ),
     );
   }

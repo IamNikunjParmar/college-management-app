@@ -1,7 +1,7 @@
 part of 'home_page_cubit.dart';
 
 class HomePageState extends Equatable {
-  final List<UserModal> userData;
+  final UserModal? userData;
   final String? msg;
   final List<GetCourseModal> courseList;
   final String selectCourse;
@@ -10,7 +10,7 @@ class HomePageState extends Equatable {
   final String? errorToastMsg;
 
   const HomePageState({
-    this.userData = const <UserModal>[],
+    this.userData,
     this.errorToastMsg = '',
     this.selectCourse = '',
     this.courseList = const <GetCourseModal>[],
@@ -20,7 +20,7 @@ class HomePageState extends Equatable {
   });
 
   HomePageState copyWith({
-    List<UserModal>? userData,
+    UserModal? userData,
     String? msg,
     List<GetCourseModal>? courseList,
     String? selectCourse,
@@ -29,13 +29,14 @@ class HomePageState extends Equatable {
     String? errorToastMsg,
   }) {
     return HomePageState(
-        userData: userData ?? this.userData,
-        msg: msg ?? this.msg,
-        courseList: courseList ?? this.courseList,
-        selectCourse: selectCourse ?? this.selectCourse,
-        isLoading: isLoading ?? this.isLoading,
-        selectedDate: selectedDate ?? this.selectedDate,
-        errorToastMsg: errorToastMsg ?? this.errorToastMsg);
+      userData: userData ?? this.userData,
+      msg: msg ?? this.msg,
+      courseList: courseList ?? this.courseList,
+      selectCourse: selectCourse ?? this.selectCourse,
+      isLoading: isLoading ?? this.isLoading,
+      selectedDate: selectedDate ?? this.selectedDate,
+      errorToastMsg: errorToastMsg ?? this.errorToastMsg,
+    );
   }
 
   @override

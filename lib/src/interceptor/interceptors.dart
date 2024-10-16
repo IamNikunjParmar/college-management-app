@@ -50,9 +50,9 @@ class DioInterceptors extends Interceptor {
 
   Dio get instance => _dio;
 
-  Future<Response> get(String endpoint, {Map<String, dynamic>? queryParameters}) async {
+  Future<Response> get(String endpoint) async {
     try {
-      return await _dio.get(endpoint, queryParameters: queryParameters);
+      return await _dio.get(endpoint);
     } on DioException catch (e) {
       throw Exception('Failed to Make API Call: $e');
     }

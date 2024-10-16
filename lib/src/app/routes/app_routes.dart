@@ -1,3 +1,4 @@
+import 'package:college_management_app/src/ui/auth/edit%20profile/edit_profile_view.dart';
 import 'package:college_management_app/src/ui/auth/forgotPassword/forgot_password_view.dart';
 import 'package:college_management_app/src/ui/auth/home/home_page_view.dart';
 import 'package:college_management_app/src/ui/auth/login/login_page_view.dart';
@@ -23,5 +24,6 @@ class AppRoutes {
         HomePageView.routeName: HomePageView.builder,
         ProfilePageView.routeName: ProfilePageView.builder,
         SelectCourseView.routeName: SelectCourseView.builder,
+        EditProfileView.routeName: EditProfileView.builder,
       };
 }

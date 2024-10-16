@@ -64,6 +64,7 @@ class UploadDocumentCubit extends Cubit<UploadDocumentState> {
         final fileName = imagePath.split('/').last; // String file path create
         emit(state.copyWith(documentPath: imagePath));
         controller.text = fileName;
+        Log.info(imagePath);
       } else {
         emit(state.copyWith(msg: 'No image selected'));
         Log.error("PickImageERROR ::: No image selected");
