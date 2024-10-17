@@ -27,7 +27,7 @@ class HomePageView extends StatefulWidget {
       create: (context) => HomePageCubit(
         const HomePageState(),
         context: context,
-      )..getOneUserData(),
+      ),
       child: const HomePageView(),
     );
   }
@@ -58,10 +58,10 @@ class _HomePageViewState extends State<HomePageView> {
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
+                    Navigator.pushNamed(
+                      context,
                       ProfilePageView.routeName,
-                      (route) => true,
-                      arguments: state.userData,
+                      // arguments: state.userData,
                     );
                   },
                   child: Container(

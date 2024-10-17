@@ -44,7 +44,7 @@ class LoginPageView extends StatelessWidget {
               children: [
                 const Center(
                   child: Text(
-                    "Login In",
+                    " User Login",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -52,51 +52,63 @@ class LoginPageView extends StatelessWidget {
                     ),
                   ),
                 ),
-                CustomText(
-                  title: l10n.emailAddress,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  colorName: Colors.blue,
-                ),
-                const Gap(5),
-                EmailTextField(
-                  hintText: l10n.enterYourEmail,
-                  controller: emailController,
-                  validator: validateEmailAddress,
-                ),
-                const Gap(10),
-                CustomText(
-                  title: l10n.password,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  colorName: Colors.blue,
-                ),
-                const Gap(5),
-                PasswordTextField(
-                  controller: passwordController,
-                  //  validator: validatePassword,
-                  hintText: l10n.enterYourPassword,
-                ),
-                const Gap(10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          RegisterPageView.routeName,
-                          (route) => true,
-                        );
-                      },
-                      child: const Text("RegisterUser?"),
+                const Gap(15),
+                Card(
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          title: l10n.emailAddress,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          colorName: Colors.blue,
+                        ),
+                        const Gap(5),
+                        EmailTextField(
+                          hintText: l10n.enterYourEmail,
+                          controller: emailController,
+                          validator: validateEmailAddress,
+                        ),
+                        const Gap(10),
+                        CustomText(
+                          title: l10n.password,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          colorName: Colors.blue,
+                        ),
+                        const Gap(5),
+                        PasswordTextField(
+                          controller: passwordController,
+                          //  validator: validatePassword,
+                          hintText: l10n.enterYourPassword,
+                        ),
+                        const Gap(10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  RegisterPageView.routeName,
+                                  (route) => true,
+                                );
+                              },
+                              child: const Text("RegisterUser?"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacementNamed(ForgotPasswordView.routeName);
+                              },
+                              child: const Text("forgotPassword?"),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacementNamed(ForgotPasswordView.routeName);
-                      },
-                      child: const Text("forgotPassword?"),
-                    ),
-                  ],
+                  ),
                 ),
                 const Gap(20),
                 Center(

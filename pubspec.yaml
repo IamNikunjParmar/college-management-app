@@ -49,6 +49,7 @@ dependencies:
   toastification: ^2.3.0
   shared_preferences: ^2.3.2
   cached_network_image: any
+  event_bus: any
 
 
 

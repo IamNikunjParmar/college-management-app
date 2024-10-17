@@ -1,7 +1,7 @@
 part of 'home_page_cubit.dart';
 
 class HomePageState extends Equatable {
-  final UserModal? userData;
+  final UserDetailsModal? userData;
   final String? msg;
   final List<GetCourseModal> courseList;
   final String selectCourse;
@@ -20,7 +20,7 @@ class HomePageState extends Equatable {
   });
 
   HomePageState copyWith({
-    UserModal? userData,
+    UserDetailsModal? userData,
     String? msg,
     List<GetCourseModal>? courseList,
     String? selectCourse,

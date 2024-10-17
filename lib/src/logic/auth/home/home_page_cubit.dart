@@ -1,35 +1,42 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/package/data/modal/getCourseModal/get_course_modal.dart';
-import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
+import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';
 import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:equatable/equatable.dart';
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toastification/toastification.dart';
 
 part 'home_page_state.dart';
 
 class HomePageCubit extends Cubit<HomePageState> {
+  late StreamSubscription<ProfileUpdatedEvent> _userAddedSubscription;
+
   HomePageCubit(super.initialState, {required this.context}) {
     getOneUserData();
+    _userAddedSubscription = eventBus.on<ProfileUpdatedEvent>().listen((event) {});
   }
 
   final BuildContext context;
+  final eventBus = EventBus();
+
   final DioInterceptors dio = DioInterceptors();
 
   Future<void> getOneUserData() async {
     try {
       final response = await dio.get(ApiEndPoints.getOneUser);
       if (response.data is Map<String, dynamic>) {
-        final user = UserModal.fromJson(response.data);
+        final user = UserDetailsModal.fromJson(response.data);
         emit(state.copyWith(userData: user));
+        eventBus.fire(ProfileUpdatedEvent(user));
       } else {
         Log.error('Unexpected response format: ${response.data}');
       }
@@ -87,4 +94,16 @@ class HomePageCubit extends Cubit<HomePageState> {
       icon: Icon(icon, color: Colors.white, size: 35),
     );
   }
+
+  @override
+  Future<void> close() {
+    _userAddedSubscription.cancel();
+    return super.close();
+  }
+}
+
+class ProfileUpdatedEvent {
+  final UserDetailsModal updatedUser;
+
+  ProfileUpdatedEvent(this.updatedUser);
 }
