@@ -50,7 +50,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       }
     } catch (e) {
       Log.error("Error during login: $e");
-      _showToast(msg ?? 'An error occurred', Colors.red, Icons.error);
+      _showToast(msg ?? 'An error occurred Server', Colors.red, Icons.error);
       Log.info(e.toString());
     }
   }

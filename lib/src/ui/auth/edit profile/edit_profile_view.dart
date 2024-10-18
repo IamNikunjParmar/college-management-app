@@ -238,7 +238,6 @@ class EditProfileView extends StatelessWidget {
                       ),
                       child: const Text("Save"),
                     ),
-                    if (state.isLoading) const Center(child: CircularProgressIndicator()),
                   ],
                 ),
               ),

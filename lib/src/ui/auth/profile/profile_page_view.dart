@@ -1,7 +1,10 @@
+import 'package:college_management_app/src/logic/auth/logOut%20User/log_out_user_cubit.dart';
 import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';
 import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
 import 'package:college_management_app/src/package/utils/images_utils.dart';
+import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:college_management_app/src/ui/auth/edit%20profile/edit_profile_view.dart';
+import 'package:college_management_app/src/ui/auth/login/login_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -13,11 +16,11 @@ class ProfilePageView extends StatelessWidget {
   const ProfilePageView({super.key});
 
   static Widget builder(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProfilePageCubit(
-        ProfilePageState(),
-        context: context,
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ProfilePageCubit(ProfilePageState(), context: context)),
+        BlocProvider(create: (context) => LogOutUserCubit(LogOutUserState(), context: context)),
+      ],
       child: const ProfilePageView(),
     );
   }
@@ -26,11 +29,9 @@ class ProfilePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserDetailsModal? newUserData = ModalRoute.of(context)!.settings.arguments as UserDetailsModal?;
-
+    UserDetailsModal? userData = ModalRoute.of(context)!.settings.arguments as UserDetailsModal?;
     return BlocBuilder<ProfilePageCubit, ProfilePageState>(
       builder: (context, state) {
-        var userData = state.userData;
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.blue,
@@ -124,14 +125,11 @@ class ProfilePageView extends StatelessWidget {
                         height: 40, // Set the desired height
                         child: OutlinedButton(
                           onPressed: () async {
-                            final updatedUser = await Navigator.pushNamed(
+                            Navigator.pushNamed(
                               context,
                               EditProfileView.routeName,
                               arguments: userData,
                             );
-                            if (updatedUser != null && updatedUser is UserDetailsModal) {
-                              userData = updatedUser;
-                            }
                           },
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: Colors.blue),
@@ -166,6 +164,26 @@ class ProfilePageView extends StatelessWidget {
                     ),
                   ),
                   CustomPersonalDataWidget(userData: userData),
+
+                  const Gap(80),
+                  Align(
+                    child: SizedBox(
+                      height: 40, // Set the desired height
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          context.read<LogOutUserCubit>().logOutUserData(userData!);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.blue),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                        child: const Text("LogOut"),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -10,7 +10,7 @@ abstract interface class AppConstants {
   static final amountRegExp = RegExp(r'^[0-9]+(\.[0-9][0-9])?$');
   static final confirmPasswordRegExp = RegExp(r'^(?!$passwordPatternRegExp$).*$');
 
-  static const baseUrl = 'https://165c-113-193-210-86.ngrok-free.app';
+  static const baseUrl = 'https://b52e-113-193-210-86.ngrok-free.app';
 
   //Body data variable
   static const courseName = 'courseName';
@@ -31,4 +31,5 @@ abstract interface class ApiEndPoints {
   static const getCourseList = "/getcourselist";
   static const studentSelectCourse = "/studentselectcourse";
   static const updateUser = "/updateUser";
+  static const logoutUser = "/logoutuser";
 }

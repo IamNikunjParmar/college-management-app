@@ -8,6 +8,7 @@ part of 'user_details_modal.dart';
 
 UserDetailsModal _$UserDetailsModalFromJson(Map<String, dynamic> json) =>
     UserDetailsModal(
+      id: json['_id'] as String?,
       studentName: json['studentName'] as String?,
       courseName: json['courseName'] as String?,
       city: json['city'] as String?,
@@ -24,6 +25,7 @@ UserDetailsModal _$UserDetailsModalFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserDetailsModalToJson(UserDetailsModal instance) =>
     <String, dynamic>{
+      '_id': instance.id,
       'studentName': instance.studentName,
       'courseName': instance.courseName,
       'city': instance.city,

@@ -22,18 +22,19 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   Future<void> editProfileUser(UserDetailsModal user) async {
     try {
       emit(state.copyWith(isLoading: true));
-      final response = await dio.patch(
-        ApiEndPoints.updateUser,
-        data: user.toJson(),
-      );
+      final response = await dio.patch(ApiEndPoints.updateUser, data: user.toJson());
       Log.debug(response);
       final newUserData = response.data['data'];
       final data = UserDetailsModal.fromJson(newUserData);
       Log.debug(data);
-      emit(state.copyWith(user: data, isLoading: false));
+      if (!isClosed) {
+        emit(state.copyWith(user: data, isLoading: false));
+      }
     } catch (e) {
-      Log.error(e);
-      emit(state.copyWith(isLoading: false));
+      Log.error("Error ::: ${e.toString()}");
+      if (!isClosed) {
+        emit(state.copyWith(isLoading: false));
+      }
     }
   }
 }

@@ -18,15 +18,16 @@ import 'package:toastification/toastification.dart';
 part 'home_page_state.dart';
 
 class HomePageCubit extends Cubit<HomePageState> {
-  late StreamSubscription<ProfileUpdatedEvent> _userAddedSubscription;
-
+  late StreamSubscription _userAddedSubscription;
+  final eventBus = EventBus();
   HomePageCubit(super.initialState, {required this.context}) {
     getOneUserData();
-    _userAddedSubscription = eventBus.on<ProfileUpdatedEvent>().listen((event) {});
+    _userAddedSubscription = eventBus.on<UserUpdatedEvent>().listen((event) {
+      getOneUserData();
+    });
   }
 
   final BuildContext context;
-  final eventBus = EventBus();
 
   final DioInterceptors dio = DioInterceptors();
 
@@ -36,13 +37,23 @@ class HomePageCubit extends Cubit<HomePageState> {
       if (response.data is Map<String, dynamic>) {
         final user = UserDetailsModal.fromJson(response.data);
         emit(state.copyWith(userData: user));
-        eventBus.fire(ProfileUpdatedEvent(user));
+        eventBus.fire(UserUpdatedEvent(user));
       } else {
         Log.error('Unexpected response format: ${response.data}');
       }
     } catch (e) {
       Log.error(e);
     }
+  }
+
+  void updateUserProfile(UserDetailsModal updatedUser) {
+    final user = state.userData?.copyWith(
+          courseName: updatedUser.courseName,
+          studentName: updatedUser.studentName,
+        ) ??
+        updatedUser;
+    emit(state.copyWith(userData: user));
+    Log.debug(user);
   }
 
   Future<void> studentSelectCourse(String courseId, int round, String todayDate) async {
@@ -102,8 +113,8 @@ class HomePageCubit extends Cubit<HomePageState> {
   }
 }
 
-class ProfileUpdatedEvent {
+class UserUpdatedEvent {
   final UserDetailsModal updatedUser;
 
-  ProfileUpdatedEvent(this.updatedUser);
+  UserUpdatedEvent(this.updatedUser);
 }

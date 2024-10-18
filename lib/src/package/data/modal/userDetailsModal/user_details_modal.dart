@@ -4,6 +4,8 @@ part 'user_details_modal.g.dart';
 
 @JsonSerializable()
 class UserDetailsModal {
+  @JsonKey(name: '_id')
+  final String? id;
   final String? studentName;
   final String? courseName;
   final String? city;
@@ -19,6 +21,7 @@ class UserDetailsModal {
   final int? pinCode;
 
   UserDetailsModal({
+    this.id,
     this.studentName,
     this.courseName,
     this.city,
@@ -38,6 +41,7 @@ class UserDetailsModal {
   Map<String, dynamic> toJson() => _$UserDetailsModalToJson(this);
 
   UserDetailsModal copyWith({
+    String? id,
     String? studentName,
     String? courseName,
     String? city,
@@ -52,6 +56,7 @@ class UserDetailsModal {
     int? pinCode,
   }) {
     return UserDetailsModal(
+      id: id ?? this.id,
       studentName: studentName ?? this.studentName,
       city: city ?? this.city,
       country: country ?? this.country,

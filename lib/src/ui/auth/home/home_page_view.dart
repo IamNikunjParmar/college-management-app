@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:college_management_app/src/interceptor/input_filed.dart';
+import 'package:college_management_app/src/logic/auth/delete%20User%20Account/delete_user_account_cubit.dart';
 import 'package:college_management_app/src/package/data/modal/getCourseModal/get_course_modal.dart';
+import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';
 import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/images_utils.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
@@ -23,11 +25,15 @@ class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
 
   static Widget builder(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomePageCubit(
-        const HomePageState(),
-        context: context,
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => HomePageCubit(const HomePageState(), context: context),
+        ),
+        BlocProvider(
+          create: (context) => DeleteUserAccountCubit(DeleteUserAccountState(), context: context),
+        ),
+      ],
       child: const HomePageView(),
     );
   }
@@ -53,15 +59,21 @@ class _HomePageViewState extends State<HomePageView> {
             backgroundColor: Colors.blue,
             title: Text(state.userData?.studentName ?? ""),
             centerTitle: true,
+            // leading: IconButton(
+            //   onPressed: () {
+            //     context.read<DeleteUserAccountCubit>().deleteUserAccount(state.userData!);
+            //   },
+            //   icon: const Icon(Icons.delete),
+            // ),
             actions: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     Navigator.pushNamed(
                       context,
                       ProfilePageView.routeName,
-                      // arguments: state.userData,
+                      arguments: state.userData,
                     );
                   },
                   child: Container(
