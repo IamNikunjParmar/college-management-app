@@ -8,8 +8,10 @@ class HomePageState extends Equatable {
   final bool isLoading;
   final String? selectedDate;
   final String? errorToastMsg;
+  final String selectedRound;
 
   const HomePageState({
+    this.selectedRound = '1',
     this.userData,
     this.errorToastMsg = '',
     this.selectCourse = '',
@@ -27,6 +29,7 @@ class HomePageState extends Equatable {
     bool? isLoading,
     String? selectedDate,
     String? errorToastMsg,
+    String? selectedRound,
   }) {
     return HomePageState(
       userData: userData ?? this.userData,
@@ -36,6 +39,7 @@ class HomePageState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       selectedDate: selectedDate ?? this.selectedDate,
       errorToastMsg: errorToastMsg ?? this.errorToastMsg,
+      selectedRound: selectedRound ?? this.selectedRound,
     );
   }
 
@@ -48,5 +52,6 @@ class HomePageState extends Equatable {
         isLoading,
         selectedDate,
         errorToastMsg,
+        selectedRound,
       ];
 }

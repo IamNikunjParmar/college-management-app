@@ -40,6 +40,22 @@
   "physicallyHandicapped": "Physically Handicapped",
   "gender" : "Gender",
   "dateOfBirth": "Date of Birth",
+
+
+  "userLogin" : "User Login",
+  "registerUser": "RegisterUser?",
+  "forgotPassword" : "forgotPassword",
+  "loginNow": "Login Now",
+
+
+
+
+
+
+
+
+
+
   "errorNameEmpty": "Please enter name!",
   "errorEmailAddressEmpty": "Please enter email address!",
   "errorPasswordEmpty": "Please enter password!",
@@ -58,4 +74,7 @@
   "errorPinCodeEmpty": "Please enter PinCode!",
   "errorAnnualIncomeEmpty": "Please enter AnnualIncome!",
   "errorConfirmPasswordCannotBeSameAsPrevious": "Confirm password cannot be the same as previous password"
+
+
+
 }

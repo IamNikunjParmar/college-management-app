@@ -104,9 +104,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "errorPinCodeEmpty":
             MessageLookupByLibrary.simpleMessage("Please enter PinCode!"),
         "fatherName": MessageLookupByLibrary.simpleMessage("Father\\\'s Name"),
+        "forgotPassword":
+            MessageLookupByLibrary.simpleMessage("forgotPassword"),
         "gender": MessageLookupByLibrary.simpleMessage("Gender"),
         "generalDetails":
             MessageLookupByLibrary.simpleMessage("General Details"),
+        "loginNow": MessageLookupByLibrary.simpleMessage("Login Now"),
         "meritRank": MessageLookupByLibrary.simpleMessage("Merit Rank"),
         "mobileNumber": MessageLookupByLibrary.simpleMessage("Mobile Number"),
         "motherName": MessageLookupByLibrary.simpleMessage("Mother\\\'s Name"),
@@ -117,9 +120,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Physically Handicapped"),
         "pinCode": MessageLookupByLibrary.simpleMessage("Pin Code"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "registerUser": MessageLookupByLibrary.simpleMessage("RegisterUser?"),
         "selectCourse": MessageLookupByLibrary.simpleMessage("Select Course"),
         "studentName": MessageLookupByLibrary.simpleMessage("StudentName"),
         "studentRegistration":
-            MessageLookupByLibrary.simpleMessage("Student Registration")
+            MessageLookupByLibrary.simpleMessage("Student Registration"),
+        "userLogin": MessageLookupByLibrary.simpleMessage("User Login")
       };
 }

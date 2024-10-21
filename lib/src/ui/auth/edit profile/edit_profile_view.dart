@@ -18,7 +18,7 @@ class EditProfileView extends StatelessWidget {
 
   static Widget builder(BuildContext context) {
     return BlocProvider(
-      create: (context) => EditProfileCubit(EditProfileState(), context: context),
+      create: (context) => EditProfileCubit(const EditProfileState(), context: context),
       child: EditProfileView(),
     );
   }

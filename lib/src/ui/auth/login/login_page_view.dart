@@ -42,10 +42,10 @@ class LoginPageView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Center(
+                Center(
                   child: Text(
-                    " User Login",
-                    style: TextStyle(
+                    l10n.userLogin,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,
@@ -96,13 +96,13 @@ class LoginPageView extends StatelessWidget {
                                   (route) => true,
                                 );
                               },
-                              child: const Text("RegisterUser?"),
+                              child: Text(l10n.registerUser),
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).pushReplacementNamed(ForgotPasswordView.routeName);
+                                Navigator.pushNamed(context, ForgotPasswordView.routeName);
                               },
-                              child: const Text("forgotPassword?"),
+                              child: Text(l10n.forgotPassword),
                             ),
                           ],
                         ),
@@ -125,9 +125,9 @@ class LoginPageView extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         textStyle: const TextStyle(fontSize: 18),
                       ),
-                      child: const Text(
-                        "Login Now",
-                        style: TextStyle(
+                      child: Text(
+                        l10n.loginNow,
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),

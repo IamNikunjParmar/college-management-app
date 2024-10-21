@@ -450,6 +450,46 @@ class CMLocalizations {
     );
   }
 
+  /// `User Login`
+  String get userLogin {
+    return Intl.message(
+      'User Login',
+      name: 'userLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `RegisterUser?`
+  String get registerUser {
+    return Intl.message(
+      'RegisterUser?',
+      name: 'registerUser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `forgotPassword`
+  String get forgotPassword {
+    return Intl.message(
+      'forgotPassword',
+      name: 'forgotPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login Now`
+  String get loginNow {
+    return Intl.message(
+      'Login Now',
+      name: 'loginNow',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please enter name!`
   String get errorNameEmpty {
     return Intl.message(

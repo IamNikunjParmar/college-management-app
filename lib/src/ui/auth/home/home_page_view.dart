@@ -139,11 +139,22 @@ class _HomePageViewState extends State<HomePageView> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  CustomTextField(
-                                    controller: roundController,
-                                    hintText: 'Enter your Round',
-                                    validator: validateRound,
+                                  DropdownButtonFormField<String>(
+                                    value: state.selectedRound, // Use roundState.selectedRound
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    items: ['1', '2', '3'].map((round) {
+                                      return DropdownMenuItem<String>(
+                                        value: round,
+                                        child: Text(round),
+                                      );
+                                    }).toList(),
+                                    onChanged: (round) {
+                                      context.read<HomePageCubit>().selectRound(round!); // Call selectRound in Cubit
+                                    },
                                   ),
+
                                   const Gap(10),
                                   const Text(
                                     "Date",
@@ -190,7 +201,7 @@ class _HomePageViewState extends State<HomePageView> {
                                           Log.info(id);
                                           context.read<HomePageCubit>().studentSelectCourse(
                                                 id,
-                                                int.parse(roundController.text),
+                                                int.parse(state.selectedRound),
                                                 state.selectedDate.toString(),
                                               );
                                         }
