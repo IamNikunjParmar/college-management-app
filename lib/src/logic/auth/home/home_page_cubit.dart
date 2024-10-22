@@ -20,9 +20,8 @@ part 'home_page_state.dart';
 
 class HomePageCubit extends Cubit<HomePageState> {
   final eventBus = EventBus();
-
   HomePageCubit(super.initialState, {required this.context}) {
-    getOneUserData();
+    // getOneUserData();
   }
 
   final BuildContext context;
@@ -38,23 +37,12 @@ class HomePageCubit extends Cubit<HomePageState> {
       if (response.data is Map<String, dynamic>) {
         final user = UserDetailsModal.fromJson(response.data);
         emit(state.copyWith(userData: user));
-        //  eventBus.fire(UserUpdatedEvent(user));
       } else {
         Log.error('Unexpected response format: ${response.data}');
       }
     } catch (e) {
       Log.error(e);
     }
-  }
-
-  void updateUserProfile(UserDetailsModal updatedUser) {
-    final user = state.userData?.copyWith(
-          courseName: updatedUser.courseName,
-          studentName: updatedUser.studentName,
-        ) ??
-        updatedUser;
-    emit(state.copyWith(userData: user));
-    Log.debug(user);
   }
 
   Future<void> studentSelectCourse(String courseId, int round, String todayDate) async {
@@ -71,6 +59,7 @@ class HomePageCubit extends Cubit<HomePageState> {
       msg = response.data['message'];
       final courseIdMsg = response.data['courseId'];
       var toastMsg = courseIdMsg;
+
       toastMsg = 'please select Your Course';
       if (response.statusCode == 200) {
         Log.success('Course selected successfully!');

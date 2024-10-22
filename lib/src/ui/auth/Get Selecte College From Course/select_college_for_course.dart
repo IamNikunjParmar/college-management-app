@@ -57,13 +57,25 @@ class SelectCollegeFromCourseView extends StatelessWidget {
                       ),
                       title: Text(college.collegeName),
                       subtitle: Text(college.courseName),
-                      onTap: () {
-                        if (isSelected) {
-                          context.read<SelectCollegeCourseCubit>().removeSelectedCollege(college.collegeId!);
-                        } else {
-                          context.read<SelectCollegeCourseCubit>().addSelectedCollege(college.collegeId!);
-                        }
-                      },
+                      trailing: Checkbox(
+                        value: isSelected,
+                        onChanged: (value) {
+                          if (college.collegeId != null) {
+                            context.read<SelectCollegeCourseCubit>().toggleCollegeSelection(college.collegeId!);
+                          } else {
+                            Log.error('College ID is null for college: ${college.collegeName}');
+                            _showToast("College ID is missing. Please try again later.", Colors.red, Icons.error);
+                          }
+                        },
+                      ),
+
+                      // onTap: () {
+                      //   if (isSelected) {
+                      //     context.read<SelectCollegeCourseCubit>().removeSelectedCollege(college.collegeId!);
+                      //   } else {
+                      //     context.read<SelectCollegeCourseCubit>().addSelectedCollege(college.collegeId!);
+                      //   }
+                      // },
                     ),
                   );
                 },
@@ -76,7 +88,7 @@ class SelectCollegeFromCourseView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<SelectCollegeCourseCubit>().selectColleges();
+          context.read<SelectCollegeCourseCubit>().selectCollegesForCourse();
         },
         child: const Icon(
           Icons.check,

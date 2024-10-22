@@ -73,7 +73,7 @@ class _HomePageViewState extends State<HomePageView> {
                     Navigator.pushNamed(
                       context,
                       ProfilePageView.routeName,
-                      arguments: state.userData,
+                      //arguments: state.userData,
                     );
                   },
                   child: Container(

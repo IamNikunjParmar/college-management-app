@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
+import 'package:college_management_app/src/logic/auth/profile/profile_page_cubit.dart';
 import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
 import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:equatable/equatable.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../package/data/modal/userDetailsModal/user_details_modal.dart';
 import '../../../package/utils/logger.dart';
@@ -14,27 +17,53 @@ import '../../../package/utils/logger.dart';
 part 'edit_profile_state.dart';
 
 class EditProfileCubit extends Cubit<EditProfileState> {
-  EditProfileCubit(super.initialState, {required this.context}) {}
-
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();
+  final eventBus = EventBus();
+
+  EditProfileCubit(super.initialState, {required this.context}) {}
 
   Future<void> editProfileUser(UserDetailsModal user) async {
     try {
-      emit(state.copyWith(isLoading: true));
       final response = await dio.patch(ApiEndPoints.updateUser, data: user.toJson());
-      Log.debug(response);
-      final newUserData = response.data['data'];
-      final data = UserDetailsModal.fromJson(newUserData);
-      Log.debug(data);
-      if (!isClosed) {
-        emit(state.copyWith(user: data, isLoading: false));
+
+      if (response.statusCode == 200) {
+        final newUserData = response.data['data'];
+        final data = UserDetailsModal.fromJson(newUserData);
+        Log.debug(data);
+        _showToast("Update SuccessFully", Colors.green, Icons.check_circle);
+        eventBus.fire(ProfileUpdatedEvent(user));
+        Navigator.pop(context);
+      } else {
+        _handleError(response.statusCode);
       }
     } catch (e) {
       Log.error("Error ::: ${e.toString()}");
-      if (!isClosed) {
-        emit(state.copyWith(isLoading: false));
-      }
     }
+  }
+
+  void _handleError(int? statusCode) {
+    if (statusCode == 400) {
+      _showToast('Bad Request', Colors.red, Icons.error);
+    } else if (statusCode == 401) {
+      _showToast('Unauthorized', Colors.red, Icons.error);
+    } else if (statusCode == 403) {
+      _showToast('Forbidden', Colors.red, Icons.error);
+    } else if (statusCode == 404) {
+      _showToast('Not Found', Colors.red, Icons.error);
+    } else if (statusCode == 500) {
+      _showToast('Internal Server Error', Colors.red, Icons.error);
+    } else {
+      _showToast('Unknown Error', Colors.red, Icons.error);
+    }
+  }
+
+  void _showToast(String message, Color backgroundColor, IconData icon) {
+    toastification.show(
+      autoCloseDuration: const Duration(seconds: 3),
+      title: Text(message, style: const TextStyle(color: Colors.white)),
+      backgroundColor: backgroundColor,
+      icon: Icon(icon, color: Colors.white, size: 35),
+    );
   }
 }

@@ -29,9 +29,11 @@ class ProfilePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserDetailsModal? userData = ModalRoute.of(context)!.settings.arguments as UserDetailsModal?;
+    UserDetailsModal? newUserData = ModalRoute.of(context)!.settings.arguments as UserDetailsModal?;
     return BlocBuilder<ProfilePageCubit, ProfilePageState>(
       builder: (context, state) {
+        final userData = state.userData;
+
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.blue,

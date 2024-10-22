@@ -1,4 +1,5 @@
 import 'package:college_management_app/src/ui/auth/Get%20Selecte%20College%20From%20Course/select_college_for_course.dart';
+import 'package:college_management_app/src/ui/auth/college%20Result/college_result_view.dart';
 import 'package:college_management_app/src/ui/auth/edit%20profile/edit_profile_view.dart';
 import 'package:college_management_app/src/ui/auth/forgotPassword/forgot_password_view.dart';
 import 'package:college_management_app/src/ui/auth/home/home_page_view.dart';
@@ -27,5 +28,6 @@ class AppRoutes {
         SelectCourseView.routeName: SelectCourseView.builder,
         EditProfileView.routeName: EditProfileView.builder,
         SelectCollegeFromCourseView.routeName: SelectCollegeFromCourseView.builder,
+        CollegeResultView.routeName: CollegeResultView.builder,
       };
 }
