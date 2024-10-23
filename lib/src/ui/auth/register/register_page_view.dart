@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../interceptor/input_filed.dart';
+import '../../../components/input_filed.dart';
 import '../../../localization/generated/l10n.dart';
 
 class RegisterPageView extends StatefulWidget {

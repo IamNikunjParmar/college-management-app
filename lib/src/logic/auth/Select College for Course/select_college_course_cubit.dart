@@ -20,7 +20,8 @@ class SelectCollegeCourseCubit extends Cubit<SelectCollegeCourseState> {
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();
   String? selectionId;
-  String? resultSelectionId;
+  String? message;
+  final selectedCollegeIds = <String>[];
 
   Future<void> getCollegeForCourse() async {
     try {
@@ -29,7 +30,7 @@ class SelectCollegeCourseCubit extends Cubit<SelectCollegeCourseState> {
         ApiEndPoints.getCollegesForCourse,
         queryParameters: {'selectId': selectionId},
       );
-
+      message = response.data['message'] as String?;
       final collegesData = response.data['data'] as List;
       final collegesIdData = response.data['collegesId'] as List;
 
@@ -64,6 +65,7 @@ class SelectCollegeCourseCubit extends Cubit<SelectCollegeCourseState> {
         Navigator.pushNamed(context, CollegeResultView.routeName, arguments: {'_id': selectionId});
       } else {
         Log.error("Error selecting colleges: ${response.statusMessage}");
+        _showToast(message ?? '', Colors.red, Icons.error);
       }
     } catch (e) {
       Log.error("Error: ${e.toString()}");
@@ -72,18 +74,24 @@ class SelectCollegeCourseCubit extends Cubit<SelectCollegeCourseState> {
     }
   }
 
+// In your SelectCollegeCourseCubit class
   void toggleCollegeSelection(String collegeId) {
-    final updatedSelectedIds = List<String>.from(state.selectedCollegeIds);
-    if (updatedSelectedIds.contains(collegeId)) {
-      updatedSelectedIds.remove(collegeId);
-    } else {
-      if (updatedSelectedIds.length < state.maxCollegeLimit) {
-        updatedSelectedIds.add(collegeId);
+    if (collegeId.isNotEmpty) {
+      final updatedSelectedIds = List<String>.from(state.selectedCollegeIds);
+      if (updatedSelectedIds.contains(collegeId)) {
+        updatedSelectedIds.remove(collegeId);
       } else {
-        _showToast("Total selected colleges exceed the maximum limit of 5", Colors.red, Icons.error);
+        if (updatedSelectedIds.length < state.maxCollegeLimit) {
+          updatedSelectedIds.add(collegeId);
+        } else {
+          _showToast("Total selected colleges exceed the maximum limit of 5", Colors.red, Icons.error);
+        }
       }
+      emit(state.copyWith(selectedCollegeIds: updatedSelectedIds));
+    } else {
+      Log.error('College ID is null. Cannot select college.');
+      _showToast("College ID is missing. Please try again later.", Colors.red, Icons.error);
     }
-    emit(state.copyWith(selectedCollegeIds: updatedSelectedIds));
   }
 
   // Future<void> selectColleges() async {

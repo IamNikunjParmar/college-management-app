@@ -2,46 +2,47 @@ import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
+import 'package:college_management_app/src/ui/auth/home/home_page_view.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:toastification/toastification.dart';
 
-part 'college_result_state.dart';
+part 'admission_payment_state.dart';
 
-class CollegeResultCubit extends Cubit<CollegeResultState> {
-  CollegeResultCubit(super.initialState, {required this.context, required this.selectionId}) {
-    getCollegeResultData();
-  }
+class AdmissionPaymentCubit extends Cubit<AdmissionPaymentState> {
+  AdmissionPaymentCubit(super.initialState, {required this.context}) {}
 
   final BuildContext context;
-  String? selectionId;
+  final DioInterceptors dio = DioInterceptors();
   String? message;
 
-  final DioInterceptors dio = DioInterceptors();
-
-  Future<void> getCollegeResultData() async {
+  Future<void> admissionFeePayment(String selectionId, int amount) async {
     try {
-      emit(state.copyWith(isLoading: true));
-      final response = await dio.get(
-        ApiEndPoints.selectCollegeResult,
-        queryParameters: {'selectId': selectionId},
+      final response = await dio.post(
+        ApiEndPoints.admissionFeePayment,
+        data: {
+          'selectId': selectionId,
+          'amount': amount,
+        },
       );
       message = response.data['message'] as String?;
-      final college = response.data['college'] as String?;
 
       if (response.statusCode == 200) {
+        Log.success('Admission fee payment successful');
         _showToast(message ?? '', Colors.green, CupertinoIcons.check_mark_circled_solid);
-        emit(state.copyWith(isLoading: false, message: message, college: college, selectionId: selectionId));
+        if (context.mounted) {
+          //  Navigator.pushReplacementNamed(context, HomePageView.routeName);
+        }
+      } else if (response.statusCode == 400 && message == "Payment already done") {
+        _showToast(message ?? '', Colors.orange, Icons.warning);
       } else {
-        Log.error("Error getting college result: ${response.statusMessage}");
+        Log.error('Admission fee payment failed: ${response.statusMessage}');
         _showToast(message ?? '', Colors.red, Icons.error);
       }
     } catch (e) {
-      Log.error("Error re: ${e.toString()}");
-      _showToast(message ?? 'Merit not match this colleges.', Colors.red, Icons.error);
-    } finally {
-      emit(state.copyWith(isLoading: false));
+      Log.error('Error during admission fee payment: ${e.toString()}');
     }
   }
 

@@ -8,9 +8,9 @@ import 'package:flutter/cupertino.dart';
 import '../../../interceptor/interceptors.dart';
 import '../../../package/data/modal/userDetailsModal/user_details_modal.dart';
 import '../../../package/resorces/appConstance.dart';
+import '../../../package/resorces/event_bus_provider.dart' as eventBusProvider;
 import '../../../package/resorces/stream_sub.dart';
 import '../../../package/utils/logger.dart';
-
 part 'profile_page_state.dart';
 
 class ProfilePageCubit extends Cubit<ProfilePageState> with StreamSubscriptionMixin {
@@ -18,19 +18,18 @@ class ProfilePageCubit extends Cubit<ProfilePageState> with StreamSubscriptionMi
 
   ProfilePageCubit(super.initialState, {required this.context}) {
     getOneUserData();
-    _userAddedSubscription = eventBus.on<ProfileUpdatedEvent>().listen((event) {
-      Log.info("inside the eventbus");
-      // getOneUserData();
+    _userAddedSubscription = eventBusProvider.eventBus.on<ProfileUpdatedEvent>().listen((event) {
+      Log.info("inside the eventbus :: ${event.updatedUser}");
       emit(state.copyWith(userData: event.updatedUser));
     });
   }
 
   final BuildContext context;
-  final eventBus = EventBus();
 
   final DioInterceptors dio = DioInterceptors();
 
   Future<void> getOneUserData() async {
+    Log.error("enter");
     try {
       final response = await dio.get(ApiEndPoints.getOneUser);
       if (response.data is Map<String, dynamic>) {

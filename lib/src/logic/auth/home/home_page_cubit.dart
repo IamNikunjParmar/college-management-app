@@ -59,8 +59,8 @@ class HomePageCubit extends Cubit<HomePageState> {
       msg = response.data['message'];
       final courseIdMsg = response.data['courseId'];
       var toastMsg = courseIdMsg;
-
       toastMsg = 'please select Your Course';
+
       if (response.statusCode == 200) {
         Log.success('Course selected successfully!');
         _showToast(msg ?? 'success', Colors.green, Icons.check_circle);

@@ -32,12 +32,11 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       msg = response.data['message'];
       if (response.statusCode == 200) {
         Log.success("Login successfully");
-
         //Store for SharedPreferences with token
         final prefs = await SharedPreferences.getInstance();
         String token = response.data['token'];
         await prefs.setString("token", token);
-        _showToast(msg ?? 'success', Colors.green, Icons.check_circle);
+        showSuccessToast(msg ?? '', '');
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             HomePageView.routeName,
@@ -46,15 +45,21 @@ class LoginPageCubit extends Cubit<LoginPageState> {
         }
       } else {
         Log.error("Invalid email or password");
-        _showToast(msg ?? 'Invalid email or password', Colors.red, Icons.error);
+        showErrorToast(msg ?? 'Invalid email or password', '');
+        emit(state.copyWith(verifyEmail: false));
       }
     } catch (e) {
       Log.error("Error during login: $e");
-      _showToast(msg ?? 'An error occurred Server', Colors.red, Icons.error);
-      Log.info(e.toString());
+      showErrorToast(msg ?? 'An error occurred Server', '');
+      emit(state.copyWith(verifyEmail: false));
+    } finally {
+      emit(state.copyWith(verifyEmail: false));
     }
   }
+}
 
+//Toast function custom
+/*
   void _showToast(String message, Color backgroundColor, IconData icon) {
     toastification.show(
       autoCloseDuration: const Duration(seconds: 3),
@@ -63,6 +68,5 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       icon: Icon(icon, color: Colors.white, size: 35),
     );
   }
-}
 
-// nikunjparmar5066@gmail.com
+*/

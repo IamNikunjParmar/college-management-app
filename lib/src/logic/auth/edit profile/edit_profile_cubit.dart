@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../package/data/modal/userDetailsModal/user_details_modal.dart';
+import '../../../package/resorces/event_bus_provider.dart' as eventBusProvider;
+import '../../../package/resorces/event_bus_provider.dart';
 import '../../../package/utils/logger.dart';
 
 part 'edit_profile_state.dart';
@@ -19,7 +21,6 @@ part 'edit_profile_state.dart';
 class EditProfileCubit extends Cubit<EditProfileState> {
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();
-  final eventBus = EventBus();
 
   EditProfileCubit(super.initialState, {required this.context}) {}
 
@@ -32,8 +33,11 @@ class EditProfileCubit extends Cubit<EditProfileState> {
         final data = UserDetailsModal.fromJson(newUserData);
         Log.debug(data);
         _showToast("Update SuccessFully", Colors.green, Icons.check_circle);
-        eventBus.fire(ProfileUpdatedEvent(user));
-        Navigator.pop(context);
+        eventBusProvider.eventBus.fire(ProfileUpdatedEvent(user));
+        Log.success(ProfileUpdatedEvent(user));
+        if (context.mounted) {
+          Navigator.pop(context, state.user);
+        }
       } else {
         _handleError(response.statusCode);
       }

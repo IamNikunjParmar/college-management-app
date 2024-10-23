@@ -1,5 +1,5 @@
 import 'package:college_management_app/src/components/custom_text.dart';
-import 'package:college_management_app/src/interceptor/input_filed.dart';
+import 'package:college_management_app/src/components/input_filed.dart';
 import 'package:college_management_app/src/logic/auth/edit%20profile/edit_profile_cubit.dart';
 import 'package:college_management_app/src/logic/auth/home/home_page_cubit.dart';
 import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';

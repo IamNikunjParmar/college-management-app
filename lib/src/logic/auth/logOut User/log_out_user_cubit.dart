@@ -28,26 +28,17 @@ class LogOutUserCubit extends Cubit<LogOutUserState> {
       msg = response.data['message'];
       if (response.statusCode == 200) {
         Log.info('User logout Successfully');
-        _showToast(msg ?? 'success', Colors.green, Icons.check_circle);
+        showSuccessToast(msg ?? "success", '');
         if (context.mounted) {
           Navigator.pushReplacementNamed(context, LoginPageView.routeName);
         }
       } else {
         Log.debug('Failed to log out');
-        _showToast(msg ?? 'Failed to log out', Colors.red, Icons.error);
+        showErrorToast(msg ?? 'Failed to log out', '');
       }
     } catch (e) {
       Log.error("Error logging out: ${e.toString()}");
-      _showToast(msg ?? 'LogOut Error for Server', Colors.red, Icons.error);
+      showErrorToast(msg ?? 'LogOut Error for Server', '');
     }
-  }
-
-  void _showToast(String message, Color backgroundColor, IconData icon) {
-    toastification.show(
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(message, style: const TextStyle(color: Colors.white)),
-      backgroundColor: backgroundColor,
-      icon: Icon(icon, color: Colors.white, size: 35),
-    );
   }
 }

@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../../components/custom_text.dart';
-import '../../../interceptor/input_filed.dart';
+import '../../../components/input_filed.dart';
 import '../../../localization/generated/l10n.dart';
 import '../../../logic/auth/forgotPassword/forgot_password_cubit.dart';
 import '../../../logic/auth/reset password with Otp/reset_password_cubit.dart';

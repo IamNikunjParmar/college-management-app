@@ -1,5 +1,7 @@
+import 'package:college_management_app/src/ui/auth/admission%20Fee%20Payment/admission_payment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 import '../../../logic/auth/college Result/college_result_cubit.dart';
 
@@ -13,7 +15,7 @@ class CollegeResultView extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => CollegeResultCubit(
-        CollegeResultState(),
+        const CollegeResultState(),
         context: context,
         selectionId: selectionId,
       ),
@@ -36,28 +38,42 @@ class CollegeResultView extends StatelessWidget {
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state.message != null || state.college != null) {
-              return Column(
-                children: [
-                  Text(
-                    state.message!,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+              return Align(
+                child: Column(
+                  children: [
+                    Text(
+                      state.message!,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Selected College: ${state.college!}',
-                    style: const TextStyle(
-                      fontSize: 16,
+                    const SizedBox(
+                      height: 16,
                     ),
-                  ),
-                ],
+                    Text(
+                      ' ${state.college!}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    const Spacer(),
+                    if (state.college != null) // Show button if college is matched
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            AdmissionPaymentView.routeName,
+                            arguments: state.selectionId,
+                          );
+                        },
+                        child: const Text('Proceed to Payment'),
+                      ),
+                  ],
+                ),
               );
             } else {
-              return const Text("No Found College Result");
+              return const Center(child: Text("No Found College Result"));
             }
           },
         ),

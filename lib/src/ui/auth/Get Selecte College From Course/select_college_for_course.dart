@@ -43,7 +43,17 @@ class SelectCollegeFromCourseView extends StatelessWidget {
                 itemCount: state.collegeList.length,
                 itemBuilder: (context, index) {
                   final college = state.collegeList[index];
-                  final isSelected = state.selectedCollegeIds.contains(college.collegeId);
+
+                  final collegeId = state.selectedCollegeIds.isNotEmpty ? state.selectedCollegeIds[index] : null;
+                  if (collegeId != null) {
+                    Log.debug("View::: $collegeId");
+                  } else {
+                    Log.error("College ID is null for college: $collegeId");
+                  }
+
+                  final isSelected =
+                      index < state.selectedCollegeIds.length && state.selectedCollegeIds.contains(collegeId);
+
                   return Card(
                     elevation: 5,
                     margin: const EdgeInsets.symmetric(vertical: 5),
@@ -60,8 +70,8 @@ class SelectCollegeFromCourseView extends StatelessWidget {
                       trailing: Checkbox(
                         value: isSelected,
                         onChanged: (value) {
-                          if (college.collegeId != null) {
-                            context.read<SelectCollegeCourseCubit>().toggleCollegeSelection(college.collegeId!);
+                          if (collegeId != null) {
+                            context.read<SelectCollegeCourseCubit>().toggleCollegeSelection(collegeId);
                           } else {
                             Log.error('College ID is null for college: ${college.collegeName}');
                             _showToast("College ID is missing. Please try again later.", Colors.red, Icons.error);

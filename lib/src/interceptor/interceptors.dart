@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 
 import '../package/resorces/appConstance.dart';
 import '../package/utils/logger.dart';
@@ -17,16 +20,6 @@ class DioInterceptors extends Interceptor {
         baseUrl: AppConstants.baseUrl,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 9),
-        validateStatus: (statusCode) {
-          if (statusCode == null) {
-            return false;
-          }
-          if (statusCode == 422) {
-            return true;
-          } else {
-            return statusCode >= 200 && statusCode < 300;
-          }
-        },
       ),
     );
 
@@ -42,6 +35,7 @@ class DioInterceptors extends Interceptor {
           return handler.next(response);
         },
         onError: (error, handler) {
+          _handleError(error);
           return handler.next(error);
         },
       ),
@@ -81,4 +75,108 @@ class DioInterceptors extends Interceptor {
       throw Exception('Failed to Make API Call $e');
     }
   }
+}
+
+void _handleError(DioException error) {
+  Log.error(error.message);
+  switch (error.response?.statusCode) {
+    case 409:
+      showErrorToast("Data is Already Present", "Try Something else");
+      break;
+    case 400:
+      showErrorToast("Bad request.", " Please try again.");
+      break;
+    case 401:
+      showErrorToast("Unauthorized.", " Please check your credentials.");
+      break;
+    case 403:
+      showErrorToast("Access denied. ", "You do not have permission.");
+      break;
+    case 404:
+      showErrorToast("Resource not found.", "Try Again");
+      break;
+    case 422:
+      showErrorToast("Validation error.", "Please check your input");
+      break;
+    case 500:
+      showErrorToast("Server error.", "Please try again later");
+      break;
+    default:
+      showErrorToast("Something went wrong. ", "Please try again.");
+      break;
+  }
+}
+
+void showSuccessToast(String msg, String des) {
+  toastification.show(
+    title: Text(
+      msg,
+      style: const TextStyle(fontWeight: FontWeight.bold),
+    ),
+    type: ToastificationType.success,
+    style: ToastificationStyle.flatColored,
+    autoCloseDuration: const Duration(seconds: 3),
+    description: RichText(
+      text: TextSpan(
+        text: des,
+        style: const TextStyle(
+          color: Colors.black,
+        ),
+      ),
+    ),
+    alignment: Alignment.topRight,
+    direction: TextDirection.ltr,
+    animationDuration: const Duration(milliseconds: 300),
+    animationBuilder: (context, animation, alignment, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+    showIcon: true,
+    icon: const Icon(Icons.check_circle_outline_rounded),
+    showProgressBar: true,
+    closeButtonShowType: CloseButtonShowType.onHover,
+    closeOnClick: false,
+    pauseOnHover: true,
+    dragToClose: true,
+  );
+}
+
+void showErrorToast(String msg, String des) {
+  toastification.show(
+    title: Text(
+      msg,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    type: ToastificationType.error,
+    style: ToastificationStyle.flatColored,
+    autoCloseDuration: const Duration(seconds: 4),
+    description: RichText(
+      text: TextSpan(
+        text: des,
+        style: const TextStyle(color: Colors.black),
+      ),
+    ),
+    alignment: Alignment.topRight,
+    direction: TextDirection.ltr,
+    animationDuration: const Duration(milliseconds: 300),
+    animationBuilder: (context, animation, alignment, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+    showIcon: true,
+    icon: const Icon(
+      Icons.cancel,
+    ),
+    showProgressBar: true,
+    closeButtonShowType: CloseButtonShowType.onHover,
+    closeOnClick: false,
+    pauseOnHover: true,
+    dragToClose: true,
+  );
 }

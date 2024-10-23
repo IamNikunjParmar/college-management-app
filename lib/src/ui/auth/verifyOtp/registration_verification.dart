@@ -1,4 +1,4 @@
-import 'package:college_management_app/src/interceptor/input_filed.dart';
+import 'package:college_management_app/src/components/input_filed.dart';
 import 'package:college_management_app/src/logic/auth/verifyOtp/registration_verification_cubit.dart';
 import 'package:college_management_app/src/package/helper/validator.dart';
 import 'package:college_management_app/src/package/utils/images_utils.dart';
