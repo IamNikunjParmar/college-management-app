@@ -28,11 +28,12 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     try {
       final response = await dio.patch(ApiEndPoints.updateUser, data: user.toJson());
 
+      final msg = response.data['message'];
       if (response.statusCode == 200) {
         final newUserData = response.data['data'];
         final data = UserDetailsModal.fromJson(newUserData);
         Log.debug(data);
-        _showToast("Update SuccessFully", Colors.green, Icons.check_circle);
+        showSuccessToast(msg, '');
         eventBusProvider.eventBus.fire(ProfileUpdatedEvent(user));
         Log.success(ProfileUpdatedEvent(user));
         if (context.mounted) {

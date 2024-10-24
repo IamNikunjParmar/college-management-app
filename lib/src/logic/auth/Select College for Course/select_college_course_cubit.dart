@@ -32,6 +32,12 @@ class SelectCollegeCourseCubit extends Cubit<SelectCollegeCourseState> {
       );
       message = response.data['message'] as String?;
       final collegesData = response.data['data'] as List;
+      for (var college in collegesData) {
+        if (college['collegeId'] == null) {
+          Log.error("College ID is null for college: ${college['collegeName']}");
+        }
+      }
+
       final collegesIdData = response.data['collegesId'] as List;
 
       final colleges = collegesData.map((e) => CollegeModal.fromJson(e)).toList();
@@ -47,7 +53,7 @@ class SelectCollegeCourseCubit extends Cubit<SelectCollegeCourseState> {
 
   Future<void> selectCollegesForCourse() async {
     if (state.selectedCollegeIds.length > state.maxCollegeLimit) {
-      _showToast("Total selected colleges exceed the maximum limit of 5", Colors.red, Icons.error);
+      showErrorToast('Total selected colleges exceed the maximum limit of 5', '');
       return;
     }
 
@@ -62,10 +68,12 @@ class SelectCollegeCourseCubit extends Cubit<SelectCollegeCourseState> {
       );
 
       if (response.statusCode == 200) {
-        Navigator.pushNamed(context, CollegeResultView.routeName, arguments: {'_id': selectionId});
+        if (context.mounted) {
+          Navigator.pushNamed(context, CollegeResultView.routeName, arguments: {'_id': selectionId});
+        }
       } else {
         Log.error("Error selecting colleges: ${response.statusMessage}");
-        _showToast(message ?? '', Colors.red, Icons.error);
+        showErrorToast(message ?? '', '');
       }
     } catch (e) {
       Log.error("Error: ${e.toString()}");
@@ -74,64 +82,166 @@ class SelectCollegeCourseCubit extends Cubit<SelectCollegeCourseState> {
     }
   }
 
-// In your SelectCollegeCourseCubit class
   void toggleCollegeSelection(String collegeId) {
-    if (collegeId.isNotEmpty) {
-      final updatedSelectedIds = List<String>.from(state.selectedCollegeIds);
-      if (updatedSelectedIds.contains(collegeId)) {
-        updatedSelectedIds.remove(collegeId);
-      } else {
-        if (updatedSelectedIds.length < state.maxCollegeLimit) {
-          updatedSelectedIds.add(collegeId);
-        } else {
-          _showToast("Total selected colleges exceed the maximum limit of 5", Colors.red, Icons.error);
-        }
-      }
-      emit(state.copyWith(selectedCollegeIds: updatedSelectedIds));
+    // Create a copy of the current selection
+    final updatedSelectedIds = List<String>.from(state.selectedCollegeIds);
+
+    if (updatedSelectedIds.contains(collegeId)) {
+      // If already selected, unselect it
+      updatedSelectedIds.remove(collegeId);
     } else {
-      Log.error('College ID is null. Cannot select college.');
-      _showToast("College ID is missing. Please try again later.", Colors.red, Icons.error);
+      // If not selected, add it
+      updatedSelectedIds.add(collegeId);
     }
+
+    emit(state.copyWith(selectedCollegeIds: updatedSelectedIds));
   }
 
-  // Future<void> selectColleges() async {
-  //   if (state.selectedCollegeIds.length > 5) {
-  //     _showToast('You can select a maximum of 5 colleges', Colors.red, Icons.error);
-  //     return;
-  //   }
-  //   try {
-  //     emit(state.copyWith(isLoading: true));
-  //     final response = await dio.post(
-  //       ApiEndPoints.studentSelectCollege,
-  //       data: {
-  //         'selectId': selectionId,
-  //         'selectedCollegeIds': state.selectedCollegeIds,
-  //       },
-  //     );
-  //     Log.debug(response);
-  //     emit(state.copyWith(isLoading: false));
-  //   } catch (e) {
-  //     Log.error(e.toString());
-  //   }
-  // }
-  //
-  // void addSelectedCollege(String collegeId) {
-  //   final updatedSelectedColleges = List<String>.from(state.selectedCollegeIds)..add(collegeId);
-  //   Log.debug(updatedSelectedColleges);
-  //   emit(state.copyWith(selectedCollegeIds: updatedSelectedColleges));
-  // }
-  //
-  // void removeSelectedCollege(String collegeId) {
-  //   final updatedSelectedColleges = List<String>.from(state.selectedCollegeIds)..remove(collegeId);
-  //   emit(state.copyWith(selectedCollegeIds: updatedSelectedColleges));
-  // }
+  void handleColleges(List<CollegeModal> colleges) {
+    for (var college in colleges) {
+      if (college.collegeId!.isEmpty) {
+        // Log the missing college ID
+        print('College ID is null for college: ${college.collegeName}');
+      }
+    }
 
-  void _showToast(String message, Color backgroundColor, IconData icon) {
-    toastification.show(
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(message, style: const TextStyle(color: Colors.white)),
-      backgroundColor: backgroundColor,
-      icon: Icon(icon, color: Colors.white, size: 35),
-    );
+    // Store colleges in the state or however you manage them
+    emit(state.copyWith(collegeList: colleges));
   }
 }
+
+// Future<void> selectColleges() async {
+//   if (state.selectedCollegeIds.length > 5) {
+//     _showToast('You can select a maximum of 5 colleges', Colors.red, Icons.error);
+//     return;
+//   }
+//   try {
+//     emit(state.copyWith(isLoading: true));
+//     final response = await dio.post(
+//       ApiEndPoints.studentSelectCollege,
+//       data: {
+//         'selectId': selectionId,
+//         'selectedCollegeIds': state.selectedCollegeIds,
+//       },
+//     );
+//     Log.debug(response);
+//     emit(state.copyWith(isLoading: false));
+//   } catch (e) {
+//     Log.error(e.toString());
+//   }
+// }
+//
+// void addSelectedCollege(String collegeId) {
+//   final updatedSelectedColleges = List<String>.from(state.selectedCollegeIds)..add(collegeId);
+//   Log.debug(updatedSelectedColleges);
+//   emit(state.copyWith(selectedCollegeIds: updatedSelectedColleges));
+// }
+//
+// void removeSelectedCollege(String collegeId) {
+//   final updatedSelectedColleges = List<String>.from(state.selectedCollegeIds)..remove(collegeId);
+//   emit(state.copyWith(selectedCollegeIds: updatedSelectedColleges));
+// }
+
+/*
+getCollegeForCourse
+Future<void> getCollegeForCourse() async {
+  try {
+    emit(state.copyWith(isLoading: true));
+
+    final response = await dio.get(
+      ApiEndPoints.getCollegesForCourse,
+      queryParameters: {'selectId': selectionId},
+    );
+
+    // Handle the response data
+    message = response.data['message'] as String?;
+    final collegesData = response.data['data'] as List;
+    final collegesIdData = response.data['collegesId'] as List;
+
+    final colleges = collegesData.map((e) => CollegeModal.fromJson(e)).toList();
+    final collegesId = collegesIdData.map((e) => e['collegeId'] as String).toList();
+
+    // Debugging logs
+    Log.debug("CollegeList :::: $colleges");
+    Log.success("CollegeId :::: $collegesId");
+
+    // Emit the updated state with colleges and selected IDs synced
+    emit(state.copyWith(
+      isLoading: false,
+      collegeList: colleges,
+      selectedCollegeIds: collegesId,  // Ensure this is properly initialized
+    ));
+  } catch (e) {
+    Log.error("error: ${e.toString()}");
+    emit(state.copyWith(isLoading: false));
+  }
+}
+
+
+// toggle
+
+void toggleCollegeSelection(String collegeId) {
+  if (collegeId.isNotEmpty) {
+    final updatedSelectedIds = List<String>.from(state.selectedCollegeIds);
+
+    // Toggle selection: add if not selected, remove if selected
+    if (updatedSelectedIds.contains(collegeId)) {
+      updatedSelectedIds.remove(collegeId);
+    } else {
+      if (updatedSelectedIds.length < state.maxCollegeLimit) {
+        updatedSelectedIds.add(collegeId);
+      } else {
+        showErrorToast('Total selected colleges exceed the maximum limit of 5', '');
+        return;
+      }
+    }
+
+    // Emit the updated state with the modified selected IDs
+    emit(state.copyWith(selectedCollegeIds: updatedSelectedIds));
+  } else {
+    Log.error('College ID is null. Cannot select college.');
+    showErrorToast('College ID is missing. Please try again later.', '');
+  }
+}
+
+// view
+ListView.builder(
+  itemCount: state.collegeList.length,
+  itemBuilder: (context, index) {
+    final college = state.collegeList[index];  // Get the college based on index
+    final collegeId = college.id;  // Extract college ID
+
+    // Check if the college is selected
+    final isSelected = state.selectedCollegeIds.contains(collegeId);
+
+    return Card(
+      elevation: 5,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue,
+          child: Text(
+            '${index + 1}',  // Display index as a count
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        title: Text(college.collegeName),
+        subtitle: Text(college.courseName),
+        trailing: Checkbox(
+          value: isSelected,  // Bind checkbox to selection state
+          onChanged: (value) {
+            if (collegeId != null) {
+              context.read<SelectCollegeCourseCubit>().toggleCollegeSelection(collegeId);
+            } else {
+              Log.error('College ID is null for college: ${college.collegeName}');
+              showErrorToast('College ID is missing. Please try again later.', '');
+            }
+          },
+        ),
+      ),
+    );
+  },
+);
+
+
+*/

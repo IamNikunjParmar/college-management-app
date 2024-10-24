@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:college_management_app/src/components/input_filed.dart';
+import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/logic/auth/delete%20User%20Account/delete_user_account_cubit.dart';
 import 'package:college_management_app/src/package/data/modal/getCourseModal/get_course_modal.dart';
 import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';
@@ -187,7 +188,16 @@ class _HomePageViewState extends State<HomePageView> {
                                     child: ElevatedButton(
                                       onPressed: () {
                                         if (globalKey.currentState!.validate()) {
-                                          String id = newCourseId?.id ?? '';
+                                          if (newCourseId == null) {
+                                            showErrorToast("Please selected Your Course", '');
+                                            return;
+                                          }
+                                          if (state.selectedDate == null) {
+                                            showErrorToast("Please selected Your Date", '');
+                                            return;
+                                          }
+
+                                          String id = newCourseId.id ?? '';
                                           Log.info(id);
                                           context.read<HomePageCubit>().studentSelectCourse(
                                                 id,

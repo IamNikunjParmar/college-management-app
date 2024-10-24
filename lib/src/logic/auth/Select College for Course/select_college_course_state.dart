@@ -9,7 +9,7 @@ class SelectCollegeCourseState extends Equatable {
   const SelectCollegeCourseState(
       {this.isLoading = false,
       this.collegeList = const <CollegeModal>[],
-      this.selectedCollegeIds = const [],
+      this.selectedCollegeIds = const <String>[],
       this.maxCollegeLimit = 5});
 
   SelectCollegeCourseState copyWith(

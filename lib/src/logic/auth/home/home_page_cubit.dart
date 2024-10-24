@@ -19,7 +19,6 @@ import 'package:toastification/toastification.dart';
 part 'home_page_state.dart';
 
 class HomePageCubit extends Cubit<HomePageState> {
-  final eventBus = EventBus();
   HomePageCubit(super.initialState, {required this.context}) {
     // getOneUserData();
   }
@@ -63,7 +62,7 @@ class HomePageCubit extends Cubit<HomePageState> {
 
       if (response.statusCode == 200) {
         Log.success('Course selected successfully!');
-        _showToast(msg ?? 'success', Colors.green, Icons.check_circle);
+        showSuccessToast(msg ?? 'success', '');
         selectionId = response.data['data']['_id'];
         if (context.mounted) {
           Navigator.pushNamed(
@@ -77,11 +76,11 @@ class HomePageCubit extends Cubit<HomePageState> {
         }
       } else {
         Log.error('Failed to select course: ${response.statusCode}');
-        _showToast(toastMsg, Colors.red, Icons.error);
+        showErrorToast(toastMsg ?? 'An error occurred', '');
       }
     } catch (e) {
       Log.error('Exception during course selection: $e');
-      _showToast(msg ?? 'An error occurred', Colors.red, Icons.error);
+      showErrorToast(msg ?? 'An error occurred', '');
     }
   }
 
@@ -95,15 +94,6 @@ class HomePageCubit extends Cubit<HomePageState> {
     String date = DateFormat('dd-MM-yyyy').format(pickedDate!);
     Log.success(date);
     emit(state.copyWith(selectedDate: date));
-  }
-
-  void _showToast(String message, Color backgroundColor, IconData icon) {
-    toastification.show(
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(message, style: const TextStyle(color: Colors.white)),
-      backgroundColor: backgroundColor,
-      icon: Icon(icon, color: Colors.white, size: 35),
-    );
   }
 
   void selectRound(String round) {

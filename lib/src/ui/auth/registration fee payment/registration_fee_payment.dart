@@ -74,9 +74,11 @@ class RegistrationFeePayment extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 const Gap(10),
-                CustomTextField(
-                  controller: amountController,
-                  hintText: 'Enter your amount',
+                const CustomTextField(
+                  hintText: '350',
+                  initialValue: '350',
+                  enabled: false,
+                  isReadOnly: true,
                 ),
                 const Gap(30),
                 SizedBox(
@@ -92,9 +94,7 @@ class RegistrationFeePayment extends StatelessWidget {
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
-                        context
-                            .read<RegistrationFeePaymentCubit>()
-                            .feesPayment(userId!, emailController.text, amountController.text);
+                        context.read<RegistrationFeePaymentCubit>().feesPayment(userId!, emailController.text, 350);
                       }
                     },
                     child: const Text('Pay'),

@@ -16,7 +16,7 @@ class RegistrationFeePaymentCubit extends Cubit<RegistrationFeePaymentState> {
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();
 
-  Future<void> feesPayment(String userId, String email, String amount) async {
+  Future<void> feesPayment(String userId, String email, int amount) async {
     try {
       final response = await dio.post(
         ApiEndPoints.registrationFeePayment,
@@ -31,7 +31,7 @@ class RegistrationFeePaymentCubit extends Cubit<RegistrationFeePaymentState> {
       Log.info(msg);
       if (response.statusCode == 200) {
         Log.success('Payment successful');
-        _showToast(msg, Colors.green, Icons.check_circle);
+        showSuccessToast(msg, '');
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             LoginPageView.routeName,
@@ -40,20 +40,10 @@ class RegistrationFeePaymentCubit extends Cubit<RegistrationFeePaymentState> {
         }
       } else {
         Log.error('Payment failed');
-        _showToast(msg, Colors.red, Icons.error);
+        showErrorToast(msg, '');
       }
     } catch (e) {
       Log.error(e);
-      Log.error(e.toString());
     }
-  }
-
-  void _showToast(String message, Color backgroundColor, IconData icon) {
-    toastification.show(
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(message, style: const TextStyle(color: Colors.white)),
-      backgroundColor: backgroundColor,
-      icon: Icon(icon, color: Colors.white, size: 35),
-    );
   }
 }

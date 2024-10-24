@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
+
 import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:college_management_app/src/ui/auth/registration%20fee%20payment/registration_fee_payment.dart';
@@ -39,7 +40,7 @@ class UploadDocumentCubit extends Cubit<UploadDocumentState> {
       Log.info(msg);
       if (response.statusCode == 200) {
         Log.success('Document upload successful');
-        _showToast(msg, Colors.green, Icons.check_circle);
+        showSuccessToast(msg, '');
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             RegistrationFeePayment.routeName,
@@ -49,7 +50,7 @@ class UploadDocumentCubit extends Cubit<UploadDocumentState> {
         }
       } else {
         Log.error('Document upload failed: ${response.statusCode}');
-        _showToast(msg.toString(), Colors.red, Icons.error);
+        showErrorToast(msg, '');
       }
     } catch (e) {
       Log.error('Error during document upload: $e');
@@ -73,14 +74,5 @@ class UploadDocumentCubit extends Cubit<UploadDocumentState> {
       emit(state.copyWith(msg: 'Error picking image: $e'));
       Log.error("PickImageERROR ::: ${e.toString()}");
     }
-  }
-
-  void _showToast(String message, Color backgroundColor, IconData icon) {
-    toastification.show(
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(message, style: const TextStyle(color: Colors.white)),
-      backgroundColor: backgroundColor,
-      icon: Icon(icon, color: Colors.white, size: 35),
-    );
   }
 }

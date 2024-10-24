@@ -1,10 +1,12 @@
 import 'package:college_management_app/src/logic/auth/home/home_page_cubit.dart';
 import 'package:college_management_app/src/logic/auth/student%20select%20Course/select_course_cubit.dart';
 import 'package:college_management_app/src/package/data/modal/getCourseModal/get_course_modal.dart';
+import 'package:college_management_app/src/package/resorces/colors.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:college_management_app/src/ui/auth/home/home_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SelectCourseView extends StatelessWidget {
   static const String routeName = "select_course";
@@ -33,7 +35,11 @@ class SelectCourseView extends StatelessWidget {
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: SpinKitWave(
+                color: AppColors.primaryBlue,
+                duration: Duration(seconds: 1),
+                size: 50.0,
+              ),
             );
           } else if (state.courseList.isNotEmpty) {
             return Padding(

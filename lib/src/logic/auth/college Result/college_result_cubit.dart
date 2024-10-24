@@ -31,26 +31,17 @@ class CollegeResultCubit extends Cubit<CollegeResultState> {
       final college = response.data['college'] as String?;
 
       if (response.statusCode == 200) {
-        _showToast(message ?? '', Colors.green, CupertinoIcons.check_mark_circled_solid);
+        showSuccessToast(message ?? '', '');
         emit(state.copyWith(isLoading: false, message: message, college: college, selectionId: selectionId));
       } else {
         Log.error("Error getting college result: ${response.statusMessage}");
-        _showToast(message ?? '', Colors.red, Icons.error);
+        showErrorToast(message ?? '', '');
       }
     } catch (e) {
       Log.error("Error re: ${e.toString()}");
-      _showToast(message ?? 'Merit not match this colleges.', Colors.red, Icons.error);
+      showErrorToast(message ?? 'Merit not match this colleges.', '');
     } finally {
       emit(state.copyWith(isLoading: false));
     }
-  }
-
-  void _showToast(String message, Color backgroundColor, IconData icon) {
-    toastification.show(
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(message, style: const TextStyle(color: Colors.white)),
-      backgroundColor: backgroundColor,
-      icon: Icon(icon, color: Colors.white, size: 35),
-    );
   }
 }

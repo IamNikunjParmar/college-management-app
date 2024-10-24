@@ -199,29 +199,33 @@ class EditProfileView extends StatelessWidget {
                           if (globalKey.currentState!.validate()) {
                             UserDetailsModal updatedUser = UserDetailsModal(
                               id: updatedUserData!.id,
-                              studentName: studentController.text,
-                              courseName: courseController.text,
-                              dateOfBirth: dateOfBirthController.text,
-                              gender: genderController.text,
-                              phoneNo: int.tryParse(mobileNumberController.text) ?? 0,
-                              cast: castController.text,
-                              fatherName: fatherNameController.text,
-                              motherName: motherNameController.text,
-                              country: countryController.text,
-                              address: addressController.text,
-                              pinCode: int.tryParse(pinCodeController.text) ?? 0,
-                              city: cityController.text,
+                              studentName: studentController.text.trim(),
+                              courseName: courseController.text.trim(),
+                              dateOfBirth: dateOfBirthController.text.trim(),
+                              gender: genderController.text.trim(),
+                              phoneNo: int.tryParse(mobileNumberController.text.trim()) ?? 0,
+                              cast: castController.text.trim(),
+                              fatherName: fatherNameController.text.trim(),
+                              motherName: motherNameController.text.trim(),
+                              country: countryController.text.trim(),
+                              address: addressController.text.trim(),
+                              pinCode: int.tryParse(pinCodeController.text.trim()) ?? 0,
+                              city: cityController.text.trim(),
                             );
 
                             context.read<EditProfileCubit>().editProfileUser(updatedUser);
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue, // Button color
+                          backgroundColor: Colors.blue,
                           padding: const EdgeInsets.symmetric(vertical: 15),
                           textStyle: const TextStyle(fontSize: 16),
                         ),
-                        child: const Text("Save"),
+                        child: state.isLoading
+                            ? const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              )
+                            : const Text("Save"),
                       ),
                     ],
                   ),

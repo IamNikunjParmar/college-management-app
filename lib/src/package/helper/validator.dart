@@ -125,7 +125,6 @@ String? validateAnnualIncome(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return CMLocalizations.current.errorAnnualIncomeEmpty;
-    return null;
   }
   return null;
 }

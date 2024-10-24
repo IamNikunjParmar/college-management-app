@@ -128,8 +128,13 @@ void showSuccessToast(String msg, String des) {
     direction: TextDirection.ltr,
     animationDuration: const Duration(milliseconds: 300),
     animationBuilder: (context, animation, alignment, child) {
-      return FadeTransition(
-        opacity: animation,
+      var offsetAnimation = Tween<Offset>(
+        begin: const Offset(0, -1),
+        end: const Offset(0, 0),
+      ).animate(animation);
+
+      return SlideTransition(
+        position: offsetAnimation,
         child: child,
       );
     },

@@ -33,7 +33,7 @@ class RegistrationVerificationCubit extends Cubit<RegistrationVerificationState>
       Log.info(msg);
       if (response.statusCode == 200) {
         Log.success("Otp Verification Success");
-        _showToast(msg, Colors.green, Icons.check_circle);
+        showSuccessToast(msg, '');
         final userId = response.data['data']['_id'];
         if (context.mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
@@ -44,19 +44,10 @@ class RegistrationVerificationCubit extends Cubit<RegistrationVerificationState>
         }
       } else {
         Log.error("Invalid Otp");
-        _showToast(msg, Colors.red, Icons.error);
+        showErrorToast(msg, '');
       }
     } catch (e) {
       Log.error("Error verify: $e");
     }
-  }
-
-  void _showToast(String message, Color backgroundColor, IconData icon) {
-    toastification.show(
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(message, style: const TextStyle(color: Colors.white)),
-      backgroundColor: backgroundColor,
-      icon: Icon(icon, color: Colors.white, size: 35),
-    );
   }
 }

@@ -74,16 +74,19 @@ class RegisterPageCubit extends Cubit<RegisterPageState> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Log.success("User registered successfully");
-        _showToast(msg, Colors.green, Icons.check_circle); // Success toast
+        showSuccessToast(msg, "");
         if (context.mounted) {
-          Navigator.of(context).pushNamed(RegistrationVerification.routeName, arguments: arguments);
+          Navigator.of(context).pushNamed(
+            RegistrationVerification.routeName,
+            arguments: arguments,
+          );
         }
       } else if (response.statusCode == 409) {
         Log.error("Registration failed: Email or phone number already exists");
-        _showToast("Email already exists", Colors.red, Icons.error);
+        showErrorToast(msg ?? 'Email already exists', '');
       } else {
         Log.error("Registration failed: ${response.statusCode}");
-        _showToast("Registration failed", Colors.red, Icons.error);
+        showErrorToast("Registration failed", '');
         Log.error(response);
       }
     } catch (e) {

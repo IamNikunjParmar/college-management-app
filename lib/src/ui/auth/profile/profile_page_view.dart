@@ -46,18 +46,6 @@ class ProfilePageView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Transform.translate(
-                  //   offset: const Offset(-15, 50),
-                  //   child: IconButton(
-                  //     onPressed: () {
-                  //       Navigator.pop(context);
-                  //     },
-                  //     icon: const Icon(
-                  //       Icons.arrow_back,
-                  //       color: Colors.blue,
-                  //     ),
-                  //   ),
-                  // ),
                   Column(
                     children: [
                       Center(
@@ -166,7 +154,6 @@ class ProfilePageView extends StatelessWidget {
                     ),
                   ),
                   CustomPersonalDataWidget(userData: userData),
-
                   const Gap(80),
                   Align(
                     child: SizedBox(

@@ -1,3 +1,4 @@
+import 'package:college_management_app/src/package/resorces/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,7 +10,7 @@ abstract class AppTheme {
   static ThemeData get lightTheme {
     const colorScheme = ColorScheme(
       brightness: Brightness.light,
-      primary: Colors.blue,
+      primary: AppColors.primaryBlue,
       onPrimary: Color(0xFFFFFFFF),
       primaryContainer: Color(0xFFFFFFFF),
       inversePrimary: Color(0x1AFFFFFF),

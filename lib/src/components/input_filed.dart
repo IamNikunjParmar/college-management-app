@@ -130,7 +130,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
-    required this.controller,
+    this.controller,
     this.focusNode,
     this.autofocus = false,
     this.validator,
@@ -143,9 +143,11 @@ class CustomTextField extends StatelessWidget {
     this.suffix,
     this.onChanged,
     this.keyBoardType,
+    this.initialValue,
+    this.enabled,
   });
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final FocusNode? focusNode;
   final bool autofocus;
   final FormFieldValidator<String>? validator;
@@ -158,6 +160,8 @@ class CustomTextField extends StatelessWidget {
   final bool isReadOnly;
   final Widget? suffix;
   final TextInputType? keyBoardType;
+  final String? initialValue;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +178,8 @@ class CustomTextField extends StatelessWidget {
       textInputAction: textInputAction,
       keyboardType: TextInputType.emailAddress,
       onFieldSubmitted: onSubmitted,
+      initialValue: initialValue,
+      enabled: enabled,
       decoration: InputDecoration(
         // prefixIcon: const Icon(Icons.email),
         labelText: labelText,

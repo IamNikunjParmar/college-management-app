@@ -2,7 +2,10 @@ import 'package:college_management_app/src/logic/auth/Select%20College%20for%20C
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:toastification/toastification.dart';
+
+import '../../../interceptor/interceptors.dart';
 
 class SelectCollegeFromCourseView extends StatelessWidget {
   static const String routeName = "select_college_for_course_view";
@@ -36,23 +39,26 @@ class SelectCollegeFromCourseView extends StatelessWidget {
           builder: (context, state) {
             if (state.isLoading) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: SpinKitCircle(
+                  color: Colors.blue,
+                  size: 50.0, // Customize size
+                ),
               );
             } else if (state.collegeList.isNotEmpty) {
               return ListView.builder(
                 itemCount: state.collegeList.length,
                 itemBuilder: (context, index) {
                   final college = state.collegeList[index];
+                  final collegeId = college.collegeId;
 
-                  final collegeId = state.selectedCollegeIds.isNotEmpty ? state.selectedCollegeIds[index] : null;
-                  if (collegeId != null) {
-                    Log.debug("View::: $collegeId");
-                  } else {
-                    Log.error("College ID is null for college: $collegeId");
-                  }
+                  // final collegeId = state.selectedCollegeIds.isNotEmpty ? state.selectedCollegeIds[index] : null;
+                  // if (collegeId != null) {
+                  //   Log.debug("View::: $collegeId");
+                  // } else {
+                  //   Log.error("College ID is null for college: $collegeId");
+                  // }
 
-                  final isSelected =
-                      index < state.selectedCollegeIds.length && state.selectedCollegeIds.contains(collegeId);
+                  final isSelected = state.selectedCollegeIds.contains(collegeId);
 
                   return Card(
                     elevation: 5,
@@ -68,24 +74,16 @@ class SelectCollegeFromCourseView extends StatelessWidget {
                       title: Text(college.collegeName),
                       subtitle: Text(college.courseName),
                       trailing: Checkbox(
-                        value: isSelected,
+                        value: isSelected, // Bind checkbox to selection state
                         onChanged: (value) {
                           if (collegeId != null) {
-                            context.read<SelectCollegeCourseCubit>().toggleCollegeSelection(collegeId);
+                            context.read<SelectCollegeCourseCubit>().toggleCollegeSelection(college.collegeId ?? '');
                           } else {
                             Log.error('College ID is null for college: ${college.collegeName}');
-                            _showToast("College ID is missing. Please try again later.", Colors.red, Icons.error);
+                            showErrorToast('College ID is missing. Please try again later.', '');
                           }
                         },
                       ),
-
-                      // onTap: () {
-                      //   if (isSelected) {
-                      //     context.read<SelectCollegeCourseCubit>().removeSelectedCollege(college.collegeId!);
-                      //   } else {
-                      //     context.read<SelectCollegeCourseCubit>().addSelectedCollege(college.collegeId!);
-                      //   }
-                      // },
                     ),
                   );
                 },
@@ -117,3 +115,47 @@ void _showToast(String message, Color backgroundColor, IconData icon) {
     icon: Icon(icon, color: Colors.white, size: 35),
   );
 }
+
+/*
+
+ListView.builder(
+  itemCount: state.collegeList.length,
+  itemBuilder: (context, index) {
+    final college = state.collegeList[index];
+    final collegeId = college.id;  // Get the college ID
+
+    // Skip rendering if the collegeId is null
+    if (collegeId == null) {
+      Log.error('College ID is null for college: ${college.collegeName}');
+      showErrorToast('College ID is missing for ${college.collegeName}.', '');
+      return SizedBox.shrink();  // Render nothing if ID is null
+    }
+
+    final isSelected = state.selectedCollegeIds.contains(collegeId);
+
+    return Card(
+      elevation: 5,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue,
+          child: Text(
+            '${index + 1}',  // Display index as count
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        title: Text(college.collegeName),
+        subtitle: Text(college.courseName),
+        trailing: Checkbox(
+          value: isSelected,  // Bind checkbox to selection state
+          onChanged: (value) {
+            context.read<SelectCollegeCourseCubit>().toggleCollegeSelection(collegeId);
+          },
+        ),
+      ),
+    );
+  },
+);
+
+
+*/

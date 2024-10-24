@@ -1,4 +1,6 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'college_modal.g.dart';
 
@@ -10,7 +12,7 @@ class CollegeModal {
   final int openingRank;
   final int closingRank;
 
-  CollegeModal({
+  const CollegeModal({
     required this.collegeName,
     required this.courseName,
     required this.openingRank,

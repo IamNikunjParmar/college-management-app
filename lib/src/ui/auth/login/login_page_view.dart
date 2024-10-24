@@ -3,7 +3,9 @@ import 'package:college_management_app/src/ui/auth/forgotPassword/forgot_passwor
 import 'package:college_management_app/src/ui/auth/register/register_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../components/custom_text.dart';
 import '../../../localization/generated/l10n.dart';
@@ -129,17 +131,17 @@ class LoginPageView extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                             textStyle: const TextStyle(fontSize: 18),
                           ),
-                          child: ModalProgressHUD(
-                            inAsyncCall: state.verifyEmail,
-                            progressIndicator: const CircularProgressIndicator(),
-                            color: Colors.white,
-                            child: Text(
-                              l10n.loginNow,
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                          child: state.verifyEmail
+                              ? const SpinKitThreeBounce(
+                                  color: Colors.white,
+                                  size: 30.0,
+                                )
+                              : Text(
+                                  l10n.loginNow,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -153,3 +155,17 @@ class LoginPageView extends StatelessWidget {
     );
   }
 }
+
+/*
+
+ ModalProgressHUD(
+                            inAsyncCall: state.verifyEmail,
+                            progressIndicator: const CircularProgressIndicator(),
+                            color: Colors.white,
+                            child: Text(
+                              l10n.loginNow,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+*/
