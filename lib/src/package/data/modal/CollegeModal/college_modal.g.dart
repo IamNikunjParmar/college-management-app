@@ -11,7 +11,7 @@ CollegeModal _$CollegeModalFromJson(Map<String, dynamic> json) => CollegeModal(
       courseName: json['courseName'] as String,
       openingRank: (json['openingRank'] as num).toInt(),
       closingRank: (json['closingRank'] as num).toInt(),
-      collegeId: json['collegeId'] as String? ?? const Uuid().v4(),
+      collegeId: json['collegeId'] as String?,
     );
 
 Map<String, dynamic> _$CollegeModalToJson(CollegeModal instance) => <String, dynamic>{
