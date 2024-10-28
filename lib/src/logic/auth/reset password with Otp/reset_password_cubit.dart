@@ -2,16 +2,15 @@ import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/ui/auth/login/login_page_view.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
 
 import '../../../interceptor/interceptors.dart';
-import '../../../package/resorces/appConstance.dart';
+import '../../../package/resorces/app_constance.dart';
 import '../../../package/utils/logger.dart';
 
 part 'reset_password_state.dart';
 
 class ResetPasswordCubit extends Cubit<ResetPasswordState> {
-  ResetPasswordCubit(super.initialState, {required this.context}) {}
+  ResetPasswordCubit(super.initialState, {required this.context});
 
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();

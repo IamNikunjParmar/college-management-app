@@ -1,20 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/package/data/modal/getCourseModal/get_course_modal.dart';
 import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';
-import 'package:college_management_app/src/package/resorces/appConstance.dart';
+import 'package:college_management_app/src/package/resorces/app_constance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:college_management_app/src/ui/auth/Get%20Selecte%20College%20From%20Course/select_college_for_course.dart';
 import 'package:equatable/equatable.dart';
-import 'package:event_bus/event_bus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:toastification/toastification.dart';
 
 part 'home_page_state.dart';
 

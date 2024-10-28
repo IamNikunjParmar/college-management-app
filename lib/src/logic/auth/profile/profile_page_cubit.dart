@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../interceptor/interceptors.dart';
 import '../../../package/data/modal/userDetailsModal/user_details_modal.dart';
-import '../../../package/resorces/appConstance.dart';
-import '../../../package/resorces/event_bus_provider.dart' as eventBusProvider;
+import '../../../package/resorces/app_constance.dart';
+import '../../../package/resorces/event_bus_provider.dart' as event_bus_provider;
 import '../../../package/resorces/stream_sub.dart';
 import '../../../package/utils/logger.dart';
 part 'profile_page_state.dart';
@@ -18,7 +17,7 @@ class ProfilePageCubit extends Cubit<ProfilePageState> with StreamSubscriptionMi
 
   ProfilePageCubit(super.initialState, {required this.context}) {
     getOneUserData();
-    _userAddedSubscription = eventBusProvider.eventBus.on<ProfileUpdatedEvent>().listen((event) {
+    _userAddedSubscription = event_bus_provider.eventBus.on<ProfileUpdatedEvent>().listen((event) {
       Log.info("inside the eventbus :: ${event.updatedUser}");
       emit(state.copyWith(userData: event.updatedUser));
     });

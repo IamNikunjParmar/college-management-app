@@ -3,17 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/logic/auth/profile/profile_page_cubit.dart';
-import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
-import 'package:college_management_app/src/package/resorces/appConstance.dart';
+import 'package:college_management_app/src/package/resorces/app_constance.dart';
 import 'package:equatable/equatable.dart';
-import 'package:event_bus/event_bus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../package/data/modal/userDetailsModal/user_details_modal.dart';
-import '../../../package/resorces/event_bus_provider.dart' as eventBusProvider;
-import '../../../package/resorces/event_bus_provider.dart';
+import '../../../package/resorces/event_bus_provider.dart' as event_bus_provider;
 import '../../../package/utils/logger.dart';
 
 part 'edit_profile_state.dart';
@@ -22,7 +18,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();
 
-  EditProfileCubit(super.initialState, {required this.context}) {}
+  EditProfileCubit(super.initialState, {required this.context});
 
   Future<void> editProfileUser(UserDetailsModal user) async {
     try {
@@ -34,7 +30,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
         final data = UserDetailsModal.fromJson(newUserData);
         Log.debug(data);
         showSuccessToast(msg, '');
-        eventBusProvider.eventBus.fire(ProfileUpdatedEvent(user));
+        event_bus_provider.eventBus.fire(ProfileUpdatedEvent(user));
         Log.success(ProfileUpdatedEvent(user));
         if (context.mounted) {
           Navigator.pop(context, state.user);

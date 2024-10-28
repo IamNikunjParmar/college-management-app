@@ -3,19 +3,18 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 
-import 'package:college_management_app/src/package/resorces/appConstance.dart';
+import 'package:college_management_app/src/package/resorces/app_constance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:college_management_app/src/ui/auth/registration%20fee%20payment/registration_fee_payment.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:toastification/toastification.dart';
 
 part 'upload_document_state.dart';
 
 class UploadDocumentCubit extends Cubit<UploadDocumentState> {
-  UploadDocumentCubit(super.initialState, {required this.context}) {}
+  UploadDocumentCubit(super.initialState, {required this.context});
 
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();

@@ -1,4 +1,3 @@
-import 'package:college_management_app/src/logic/auth/admission%20Payment/admission_payment_cubit.dart';
 import 'package:college_management_app/src/ui/auth/Get%20Selecte%20College%20From%20Course/select_college_for_course.dart';
 import 'package:college_management_app/src/ui/auth/admission%20Fee%20Payment/admission_payment_view.dart';
 import 'package:college_management_app/src/ui/auth/college%20Result/college_result_view.dart';

@@ -7,7 +7,6 @@ import 'package:pinput/pinput.dart';
 import '../../../components/custom_text.dart';
 import '../../../components/input_filed.dart';
 import '../../../localization/generated/l10n.dart';
-import '../../../logic/auth/forgotPassword/forgot_password_cubit.dart';
 import '../../../logic/auth/reset password with Otp/reset_password_cubit.dart';
 import '../../../package/helper/validator.dart';
 import '../../../package/utils/images_utils.dart';
@@ -30,7 +29,7 @@ class ResetPasswordView extends StatelessWidget {
     );
   }
 
-  GlobalKey<FormState> globalKey = GlobalKey();
+  final GlobalKey<FormState> globalKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     final l10n = CMLocalizations.of(context);

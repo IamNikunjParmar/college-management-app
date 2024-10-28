@@ -73,8 +73,7 @@
   "errorAddressEmpty": "Please enter Address!",
   "errorPinCodeEmpty": "Please enter PinCode!",
   "errorAnnualIncomeEmpty": "Please enter AnnualIncome!",
-  "errorConfirmPasswordCannotBeSameAsPrevious": "Confirm password cannot be the same as previous password"
-
-
-
+  "errorConfirmPasswordCannotBeSameAsPrevious": "Confirm password cannot be the same as previous password",
+  "logout": "LogOut",
+  "editProfile": "Edit Profile"
 }

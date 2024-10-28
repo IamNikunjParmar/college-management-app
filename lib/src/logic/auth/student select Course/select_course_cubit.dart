@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../package/data/modal/getCourseModal/get_course_modal.dart';
-import '../../../package/resorces/appConstance.dart';
+import '../../../package/resorces/app_constance.dart';
 import '../../../package/utils/logger.dart';
 
 part 'select_course_state.dart';

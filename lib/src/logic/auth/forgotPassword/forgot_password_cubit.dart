@@ -1,18 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
-import 'package:college_management_app/src/package/resorces/appConstance.dart';
+import 'package:college_management_app/src/package/resorces/app_constance.dart';
 import 'package:college_management_app/src/ui/auth/reset%20password%20With%20Otp/reset_password_view.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 
 import '../../../package/utils/logger.dart';
-import '../../../ui/auth/login/login_page_view.dart';
 
 part 'forgot_password_state.dart';
 
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
-  ForgotPasswordCubit(super.initialState, {required this.context}) {}
+  ForgotPasswordCubit(super.initialState, {required this.context});
 
   final BuildContext context;
   final DioInterceptors dio = DioInterceptors();

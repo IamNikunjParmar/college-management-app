@@ -669,6 +669,26 @@ class CMLocalizations {
       args: [],
     );
   }
+
+  /// `LogOut`
+  String get logout {
+    return Intl.message(
+      'LogOut',
+      name: 'logout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Profile`
+  String get editProfile {
+    return Intl.message(
+      'Edit Profile',
+      name: 'editProfile',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<CMLocalizations> {

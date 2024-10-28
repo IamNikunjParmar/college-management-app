@@ -26,7 +26,7 @@ class ForgotPasswordView extends StatelessWidget {
     );
   }
 
-  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

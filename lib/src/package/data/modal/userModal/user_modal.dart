@@ -1,11 +1,10 @@
-import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_modal.g.dart';
 
 @JsonSerializable()
 class UserModal {
-  String studentName;
+  final String studentName;
   String email;
   String password;
   String? confirmPassword;
@@ -134,7 +133,7 @@ class UserModal {
       familyAnnualIncome: familyAnnualIncome ?? this.familyAnnualIncome,
       physicallyHandicapped: physicallyHandicapped ?? this.physicallyHandicapped,
       gender: gender ?? this.gender,
-      dateOfBirth: dateOfbirth ?? this.dateOfBirth,
+      dateOfBirth: dateOfbirth ?? dateOfBirth,
       alternatePhoneNo: alternatePhoneNo ?? this.alternatePhoneNo,
       updatedAt: updatedAt ?? this.updatedAt,
       createdAt: createdAt ?? this.createdAt,

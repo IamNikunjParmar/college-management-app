@@ -1,19 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
-import 'package:college_management_app/src/package/resorces/appConstance.dart';
+import 'package:college_management_app/src/package/resorces/app_constance.dart';
 import 'package:college_management_app/src/ui/auth/uploadDocument/upload_document_view.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toastification/toastification.dart';
 
 import '../../../package/utils/logger.dart';
 
 part 'registration_verification_state.dart';
 
 class RegistrationVerificationCubit extends Cubit<RegistrationVerificationState> {
-  RegistrationVerificationCubit(super.initialState, {required this.context}) {}
+  RegistrationVerificationCubit(super.initialState, {required this.context});
 
   final DioInterceptors dio = DioInterceptors();
   final BuildContext context;

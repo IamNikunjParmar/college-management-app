@@ -1,10 +1,8 @@
-import 'package:college_management_app/src/components/input_filed.dart';
 import 'package:college_management_app/src/logic/auth/verifyOtp/registration_verification_cubit.dart';
 import 'package:college_management_app/src/package/helper/validator.dart';
 import 'package:college_management_app/src/package/utils/images_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pinput/pinput.dart';
 
 class RegistrationVerification extends StatelessWidget {
@@ -23,7 +21,7 @@ class RegistrationVerification extends StatelessWidget {
     );
   }
 
-  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

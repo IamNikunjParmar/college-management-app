@@ -3,7 +3,7 @@ part of 'profile_page_cubit.dart';
 class ProfilePageState extends Equatable {
   final UserDetailsModal? userData;
 
-  ProfilePageState({this.userData});
+  const ProfilePageState({this.userData});
 
   ProfilePageState copyWith({UserDetailsModal? userData}) {
     return ProfilePageState(userData: userData ?? this.userData);

@@ -1,23 +1,13 @@
-import 'dart:developer';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:college_management_app/src/components/input_filed.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
-import 'package:college_management_app/src/logic/auth/delete%20User%20Account/delete_user_account_cubit.dart';
 import 'package:college_management_app/src/package/data/modal/getCourseModal/get_course_modal.dart';
-import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';
-import 'package:college_management_app/src/package/resorces/appConstance.dart';
 import 'package:college_management_app/src/package/utils/images_utils.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:college_management_app/src/ui/auth/student%20Select%20Course/select_course.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../../../localization/generated/l10n.dart';
 import '../../../logic/auth/home/home_page_cubit.dart';
-import '../../../package/helper/validator.dart';
+import '../../../package/resorces/size.dart';
 import '../profile/profile_page_view.dart';
 
 class HomePageView extends StatefulWidget {
@@ -49,7 +39,7 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     GetCourseModal? newCourseId = ModalRoute.of(context)!.settings.arguments as GetCourseModal?;
-    final l10n = CMLocalizations.of(context);
+    //final l10n = CMLocalizations.of(context);
     return BlocBuilder<HomePageCubit, HomePageState>(
       builder: (context, state) {
         return Scaffold(
@@ -98,7 +88,7 @@ class _HomePageViewState extends State<HomePageView> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const Gap(15),
+                        const Gap(Spacing.large),
                         Container(
                           height: 400,
                           width: double.infinity,
@@ -123,7 +113,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       );
                                     },
                                   ),
-                                  const Gap(10),
+                                  const Gap(Spacing.medium),
                                   const Text(
                                     "Round",
                                     style: TextStyle(
@@ -146,7 +136,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       context.read<HomePageCubit>().selectRound(round!);
                                     },
                                   ),
-                                  const Gap(10),
+                                  const Gap(Spacing.medium),
                                   const Text(
                                     "Date",
                                     style: TextStyle(
@@ -154,13 +144,13 @@ class _HomePageViewState extends State<HomePageView> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  const Gap(10),
+                                  const Gap(Spacing.medium),
                                   GestureDetector(
                                     onTap: () {
                                       context.read<HomePageCubit>().selectDate(context);
                                     },
                                     child: Container(
-                                      height: 55,
+                                      height: MediaQuery.sizeOf(context).height * 0.07,
                                       width: double.infinity,
                                       padding: const EdgeInsets.all(12),
                                       alignment: Alignment.topLeft,
@@ -183,7 +173,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       ),
                                     ),
                                   ),
-                                  const Gap(30),
+                                  const Gap(Spacing.xxLarge),
                                   Align(
                                     child: ElevatedButton(
                                       onPressed: () {
@@ -197,7 +187,7 @@ class _HomePageViewState extends State<HomePageView> {
                                             return;
                                           }
 
-                                          String id = newCourseId.id ?? '';
+                                          String id = newCourseId.id;
                                           Log.info(id);
                                           context.read<HomePageCubit>().studentSelectCourse(
                                                 id,

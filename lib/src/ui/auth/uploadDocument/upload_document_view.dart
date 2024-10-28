@@ -1,8 +1,8 @@
 import 'package:college_management_app/src/logic/auth/upload%20Document/upload_document_cubit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UploadDocumentView extends StatelessWidget {
   static const String routeName = "upload_document_view";
@@ -35,7 +35,9 @@ class UploadDocumentView extends StatelessWidget {
     if (args is Map<String, dynamic> && args.containsKey('_id')) {
       userId = args['_id'].toString();
     } else {
-      print('Invalid arguments passed to UploadDocumentView');
+      if (kDebugMode) {
+        print('Invalid arguments passed to UploadDocumentView');
+      }
       userId = null;
     }
     return BlocBuilder<UploadDocumentCubit, UploadDocumentState>(

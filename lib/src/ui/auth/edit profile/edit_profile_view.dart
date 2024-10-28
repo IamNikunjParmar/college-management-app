@@ -1,16 +1,12 @@
 import 'package:college_management_app/src/components/custom_text.dart';
 import 'package:college_management_app/src/components/input_filed.dart';
 import 'package:college_management_app/src/logic/auth/edit%20profile/edit_profile_cubit.dart';
-import 'package:college_management_app/src/logic/auth/home/home_page_cubit.dart';
 import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';
 import 'package:college_management_app/src/package/helper/validator.dart';
-import 'package:college_management_app/src/ui/auth/profile/profile_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../package/data/modal/userModal/user_modal.dart';
-import '../../../package/utils/logger.dart';
 
 class EditProfileView extends StatelessWidget {
   static const String routeName = 'edit_profile_view';

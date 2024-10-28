@@ -1,5 +1,5 @@
 import '../../localization/generated/l10n.dart';
-import '../resorces/appConstance.dart';
+import '../resorces/app_constance.dart';
 
 String? validateFullName(String? value) {
   value = value?.trim() ?? "";
@@ -62,7 +62,6 @@ String? validateCourseName(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return CMLocalizations.current.errorCourseNameEmpty;
-    return null;
   }
   return null;
 }
@@ -71,7 +70,6 @@ String? validateMeritRank(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return CMLocalizations.current.errorMeritRankEmpty;
-    return null;
   }
   return null;
 }
@@ -80,7 +78,6 @@ String? validateCast(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return CMLocalizations.current.errorCastEmpty;
-    return null;
   }
   return null;
 }
@@ -89,7 +86,6 @@ String? validateCityName(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return CMLocalizations.current.errorCityNameEmpty;
-    return null;
   }
   return null;
 }
@@ -98,7 +94,6 @@ String? validateCountryName(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return CMLocalizations.current.errorCountryNameEmpty;
-    return null;
   }
   return null;
 }
@@ -107,7 +102,6 @@ String? validateAddress(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return CMLocalizations.current.errorAddressEmpty;
-    return null;
   }
   return null;
 }
@@ -116,7 +110,6 @@ String? validatePinCode(String? value) {
   value = value?.trim() ?? "";
   if (value.isEmpty) {
     return CMLocalizations.current.errorPinCodeEmpty;
-    return null;
   }
   return null;
 }

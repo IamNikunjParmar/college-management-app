@@ -1,9 +1,8 @@
 import 'package:college_management_app/src/logic/auth/Select%20College%20for%20Course/select_college_course_cubit.dart';
+import 'package:college_management_app/src/package/resorces/colors.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toastification/toastification.dart';
-import 'package:uuid/uuid.dart';
 
 class SelectCollegeFromCourseView extends StatelessWidget {
   static const String routeName = "select_college_for_course_view";
@@ -49,16 +48,37 @@ class SelectCollegeFromCourseView extends StatelessWidget {
 
                   if (collegeId != null) {
                     Log.debug("View::::$collegeId");
-                    return Card(
-                      elevation: 5,
-                      margin: const EdgeInsets.all(5),
+                    return Container(
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.all(8),
+                      height: MediaQuery.sizeOf(context).height * 0.1,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: state.selectedCollegeIds.contains(collegeId) ? Colors.grey.shade300 : Colors.white,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 5,
+                            color: Colors.grey,
+                          ),
+                        ],
+                      ),
                       child: InkWell(
                         onTap: () {
                           context.read<SelectCollegeCourseCubit>().selectCollege(collegeId);
                         },
                         child: ListTile(
-                          title: Text(college.collegeName),
+                          title: Text(
+                            college.collegeName,
+                            style: const TextStyle(),
+                          ),
                           subtitle: Text(college.courseName),
+                          trailing: state.selectedCollegeIds.contains(collegeId)
+                              ? const Icon(Icons.check, color: Colors.green)
+                              : const SizedBox.shrink(),
                         ),
                       ),
                     );
@@ -75,25 +95,15 @@ class SelectCollegeFromCourseView extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryBlue,
         onPressed: () {
           context.read<SelectCollegeCourseCubit>().submitSelectedColleges();
         },
         child: const Icon(
           Icons.check,
-          color: Colors.blue,
+          color: Colors.white,
         ),
       ),
     );
   }
 }
-
-void _showToast(String message, Color backgroundColor, IconData icon) {
-  toastification.show(
-    autoCloseDuration: const Duration(seconds: 3),
-    title: Text(message, style: const TextStyle(color: Colors.white)),
-    backgroundColor: backgroundColor,
-    icon: Icon(icon, color: Colors.white, size: 35),
-  );
-}
-
-//iup3y@livinitlarge.net

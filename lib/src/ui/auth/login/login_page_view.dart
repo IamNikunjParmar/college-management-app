@@ -1,17 +1,15 @@
 import 'package:college_management_app/src/components/input_filed.dart';
+import 'package:college_management_app/src/package/resorces/size.dart';
 import 'package:college_management_app/src/ui/auth/forgotPassword/forgot_password_view.dart';
 import 'package:college_management_app/src/ui/auth/register/register_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../components/custom_text.dart';
 import '../../../localization/generated/l10n.dart';
 import '../../../logic/auth/login/login_page_cubit.dart';
 import '../../../package/helper/validator.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginPageView extends StatelessWidget {
   static const String routeName = "login_Page_view";
@@ -31,7 +29,7 @@ class LoginPageView extends StatelessWidget {
     );
   }
 
-  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +56,7 @@ class LoginPageView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Gap(15),
+                    const Gap(Spacing.large),
                     Card(
                       elevation: 5,
                       child: Padding(
@@ -72,26 +70,26 @@ class LoginPageView extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               colorName: Colors.blue,
                             ),
-                            const Gap(5),
+                            const Gap(Spacing.xSmall),
                             EmailTextField(
                               hintText: l10n.enterYourEmail,
                               controller: emailController,
                               validator: validateEmailAddress,
                             ),
-                            const Gap(10),
+                            const Gap(Spacing.small),
                             CustomText(
                               title: l10n.password,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               colorName: Colors.blue,
                             ),
-                            const Gap(5),
+                            const Gap(Spacing.xSmall),
                             PasswordTextField(
                               controller: passwordController,
                               //  validator: validatePassword,
                               hintText: l10n.enterYourPassword,
                             ),
-                            const Gap(10),
+                            const Gap(Spacing.small),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -116,10 +114,11 @@ class LoginPageView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Gap(20),
+                    const Gap(Spacing.large),
                     Center(
                       child: SizedBox(
                         width: double.infinity,
+                        height: MediaQuery.sizeOf(context).height * 0.06,
                         child: ElevatedButton(
                           onPressed: () {
                             if (globalKey.currentState!.validate()) {
@@ -156,16 +155,6 @@ class LoginPageView extends StatelessWidget {
   }
 }
 
-/*
+//41d3r@livinitlarge.net   jatin
 
- ModalProgressHUD(
-                            inAsyncCall: state.verifyEmail,
-                            progressIndicator: const CircularProgressIndicator(),
-                            color: Colors.white,
-                            child: Text(
-                              l10n.loginNow,
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-*/
+//k2sb4@livinitlarge.net     nitesh

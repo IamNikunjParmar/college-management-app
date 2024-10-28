@@ -1,8 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:college_management_app/src/interceptor/interceptors.dart';
 import 'package:college_management_app/src/package/data/modal/userDetailsModal/user_details_modal.dart';
-import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
-import 'package:college_management_app/src/package/resorces/appConstance.dart';
+import 'package:college_management_app/src/package/resorces/app_constance.dart';
 import 'package:college_management_app/src/package/utils/logger.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';

@@ -3,8 +3,6 @@ import 'package:college_management_app/src/package/data/modal/courseModal/course
 import 'package:college_management_app/src/package/data/modal/userModal/user_modal.dart';
 import 'package:college_management_app/src/logic/auth/register/register_page_cubit.dart';
 import 'package:college_management_app/src/package/helper/validator.dart';
-import 'package:college_management_app/src/package/utils/logger.dart';
-import 'package:college_management_app/src/ui/auth/verifyOtp/registration_verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -547,27 +545,3 @@ class _RegisterPageViewState extends State<RegisterPageView> {
     );
   }
 }
-
-// TODO: General details
-/*
-student name
-email and password and confirm
-mobile number
-course name
-meritRank
-
-// TODO: personal Details
-
-gender
-dob
-father and mother name
-cast
-city
-country
-address
-pinCode
-familyAnnualIncome
-physicallyHandicapped
-alternatePhoneNo
-
- */

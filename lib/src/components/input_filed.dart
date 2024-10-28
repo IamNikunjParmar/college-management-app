@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:gap/gap.dart';
+
+import '../package/data/modal/userDetailsModal/user_details_modal.dart';
 
 class EmailTextField extends StatelessWidget {
   const EmailTextField({
@@ -196,6 +198,112 @@ class CustomTextField extends StatelessWidget {
         //   ),
         // ),
       ),
+    );
+  }
+}
+
+class CustomPersonalDataWidget extends StatelessWidget {
+  const CustomPersonalDataWidget({super.key, required this.userData});
+
+  final UserDetailsModal? userData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Gap(20),
+        CustomRowWidget(
+          userData: userData,
+          title: 'Date of Birth',
+          subtitle: userData?.dateOfBirth ?? 'Loading...',
+        ),
+        const Gap(10),
+        CustomRowWidget(
+          userData: userData,
+          title: 'Gender',
+          subtitle: userData?.gender ?? 'Loading...',
+        ),
+        const Gap(10),
+        CustomRowWidget(
+          userData: userData,
+          title: 'Mobile Number',
+          subtitle: userData?.phoneNo.toString() ?? 'Loading...',
+        ),
+        const Gap(10),
+        CustomRowWidget(
+          userData: userData,
+          title: 'Cast',
+          subtitle: userData?.cast ?? 'Loading...',
+        ),
+        const Gap(10),
+        CustomRowWidget(
+          userData: userData,
+          title: 'Father Name',
+          subtitle: userData?.fatherName ?? 'Loading...',
+        ),
+        const Gap(10),
+        CustomRowWidget(
+          userData: userData,
+          title: 'Mother Name',
+          subtitle: userData?.motherName ?? 'Loading...',
+        ),
+        const Gap(10),
+        CustomRowWidget(
+          userData: userData,
+          title: 'Country',
+          subtitle: userData?.country ?? 'Loading...',
+        ),
+        const Gap(10),
+        CustomRowWidget(
+          userData: userData,
+          title: 'Address',
+          subtitle: userData?.address ?? 'Loading...',
+        ),
+        const Gap(10),
+        CustomRowWidget(
+          userData: userData,
+          title: 'PinCode',
+          subtitle: userData?.pinCode.toString() ?? 'Loading...',
+        ),
+      ],
+    );
+  }
+}
+
+class CustomRowWidget extends StatelessWidget {
+  final String? title;
+  final String? subtitle;
+  const CustomRowWidget({
+    super.key,
+    required this.userData,
+    this.title,
+    this.subtitle,
+  });
+
+  final UserDetailsModal? userData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '$title : ',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            color: Colors.grey.shade700,
+          ),
+        ),
+        Text(
+          subtitle ?? ' not found',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            color: Colors.grey.shade700,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:college_management_app/src/ui/auth/admission%20Fee%20Payment/admission_payment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 
 import '../../../logic/auth/college Result/college_result_cubit.dart';
 

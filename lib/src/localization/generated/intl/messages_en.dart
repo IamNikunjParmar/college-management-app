@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "country": MessageLookupByLibrary.simpleMessage("Country"),
         "courseName": MessageLookupByLibrary.simpleMessage("Course Name"),
         "dateOfBirth": MessageLookupByLibrary.simpleMessage("Date of Birth"),
+        "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
         "emailAddress": MessageLookupByLibrary.simpleMessage("Email Address"),
         "enterYourAddress":
             MessageLookupByLibrary.simpleMessage("Enter Your address"),
@@ -110,6 +111,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "generalDetails":
             MessageLookupByLibrary.simpleMessage("General Details"),
         "loginNow": MessageLookupByLibrary.simpleMessage("Login Now"),
+        "logout": MessageLookupByLibrary.simpleMessage("LogOut"),
         "meritRank": MessageLookupByLibrary.simpleMessage("Merit Rank"),
         "mobileNumber": MessageLookupByLibrary.simpleMessage("Mobile Number"),
         "motherName": MessageLookupByLibrary.simpleMessage("Mother\\\'s Name"),

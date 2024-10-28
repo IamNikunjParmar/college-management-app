@@ -1,10 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toastification/toastification.dart';
 
-import '../package/resorces/appConstance.dart';
+import '../package/resorces/app_constance.dart';
 import '../package/utils/logger.dart';
 
 class DioInterceptors extends Interceptor {
