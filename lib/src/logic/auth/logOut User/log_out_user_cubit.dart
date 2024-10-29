@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../package/utils/logger.dart';
-import '../../../ui/auth/login/login_page_view.dart';
 
 part 'log_out_user_state.dart';
 

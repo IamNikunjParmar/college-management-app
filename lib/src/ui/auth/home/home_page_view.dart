@@ -6,6 +6,7 @@ import 'package:college_management_app/src/ui/auth/student%20Select%20Course/sel
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import '../../../localization/generated/l10n.dart';
 import '../../../logic/auth/home/home_page_cubit.dart';
 import '../../../package/resorces/size.dart';
 import '../profile/profile_page_view.dart';
@@ -44,7 +45,7 @@ class _HomePageViewState extends State<HomePageView> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.blue,
+            //backgroundColor: Colors.blue,
             title: Text(state.userData?.studentName ?? ""),
             centerTitle: true,
             actions: [
@@ -81,125 +82,128 @@ class _HomePageViewState extends State<HomePageView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Select Course",
-                          style: TextStyle(
+                        Text(
+                          CMLocalizations.of(context).selectCourse,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         const Gap(Spacing.large),
-                        Container(
-                          height: 400,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.25),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
+                        Card(
+                          elevation: 10,
+                          child: Container(
+                            height: 400,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.25),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(15),
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomSelectCourse(
-                                    text: newCourseId?.courseName ?? 'select Your Course',
-                                    onTap: () {
-                                      Navigator.of(context).pushNamedAndRemoveUntil(
-                                        SelectCourseView.routeName,
-                                        (route) => true,
-                                      );
-                                    },
-                                  ),
-                                  const Gap(Spacing.medium),
-                                  const Text(
-                                    "Round",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  DropdownButtonFormField<String>(
-                                    value: state.selectedRound, // Use roundState.selectedRound
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    items: ['1', '2', '3'].map((round) {
-                                      return DropdownMenuItem<String>(
-                                        value: round,
-                                        child: Text(round),
-                                      );
-                                    }).toList(),
-                                    onChanged: (round) {
-                                      context.read<HomePageCubit>().selectRound(round!);
-                                    },
-                                  ),
-                                  const Gap(Spacing.medium),
-                                  const Text(
-                                    "Date",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  const Gap(Spacing.medium),
-                                  GestureDetector(
-                                    onTap: () {
-                                      context.read<HomePageCubit>().selectDate(context);
-                                    },
-                                    child: Container(
-                                      height: MediaQuery.sizeOf(context).height * 0.07,
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(12),
-                                      alignment: Alignment.topLeft,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Colors.blue,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        state.selectedDate == null ? 'Select Date' : '${state.selectedDate}',
-                                        style: TextStyle(
-                                          color: state.selectedDate == null ? Colors.grey : Colors.blue,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const Gap(Spacing.xxLarge),
-                                  Align(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        if (globalKey.currentState!.validate()) {
-                                          if (newCourseId == null) {
-                                            showErrorToast("Please selected Your Course", '');
-                                            return;
-                                          }
-                                          if (state.selectedDate == null) {
-                                            showErrorToast("Please selected Your Date", '');
-                                            return;
-                                          }
-
-                                          String id = newCourseId.id;
-                                          Log.info(id);
-                                          context.read<HomePageCubit>().studentSelectCourse(
-                                                id,
-                                                int.parse(state.selectedRound),
-                                                state.selectedDate.toString(),
-                                              );
-                                        }
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomSelectCourse(
+                                      text: newCourseId?.courseName ?? 'select Your Course',
+                                      onTap: () {
+                                        Navigator.of(context).pushNamedAndRemoveUntil(
+                                          SelectCourseView.routeName,
+                                          (route) => true,
+                                        );
                                       },
-                                      child: const Text("Continue"),
                                     ),
-                                  ),
-                                ],
+                                    const Gap(Spacing.medium),
+                                    const Text(
+                                      "Round",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    DropdownButtonFormField<String>(
+                                      value: state.selectedRound, // Use roundState.selectedRound
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      items: ['1', '2', '3'].map((round) {
+                                        return DropdownMenuItem<String>(
+                                          value: round,
+                                          child: Text(round),
+                                        );
+                                      }).toList(),
+                                      onChanged: (round) {
+                                        context.read<HomePageCubit>().selectRound(round!);
+                                      },
+                                    ),
+                                    const Gap(Spacing.medium),
+                                    const Text(
+                                      "Date",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const Gap(Spacing.medium),
+                                    GestureDetector(
+                                      onTap: () {
+                                        context.read<HomePageCubit>().selectDate(context);
+                                      },
+                                      child: Container(
+                                        height: MediaQuery.sizeOf(context).height * 0.07,
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(12),
+                                        alignment: Alignment.topLeft,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.blue,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(10),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          state.selectedDate == null ? 'Select Date' : '${state.selectedDate}',
+                                          style: TextStyle(
+                                            color: state.selectedDate == null ? Colors.grey : Colors.blue,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const Gap(Spacing.xxLarge),
+                                    Align(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (globalKey.currentState!.validate()) {
+                                            if (newCourseId == null) {
+                                              showErrorToast("Please selected Your Course", '');
+                                              return;
+                                            }
+                                            if (state.selectedDate == null) {
+                                              showErrorToast("Please selected Your Date", '');
+                                              return;
+                                            }
+
+                                            String id = newCourseId.id;
+                                            Log.info(id);
+                                            context.read<HomePageCubit>().studentSelectCourse(
+                                                  id,
+                                                  int.parse(state.selectedRound),
+                                                  state.selectedDate.toString(),
+                                                );
+                                          }
+                                        },
+                                        child: const Text("Continue"),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

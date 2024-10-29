@@ -53,16 +53,6 @@ class EmailTextField extends StatelessWidget {
         labelText: labelText,
         hintText: hintText,
         suffixIcon: suffix,
-        // enabledBorder: const OutlineInputBorder(
-        //   borderRadius: BorderRadius.all(
-        //     Radius.circular(15),
-        //   ),
-        // ),
-        // focusedBorder: const OutlineInputBorder(
-        //   borderRadius: BorderRadius.all(
-        //     Radius.circular(15),
-        //   ),
-        // ),
       ),
     );
   }
@@ -187,16 +177,6 @@ class CustomTextField extends StatelessWidget {
         labelText: labelText,
         hintText: hintText,
         suffixIcon: suffix,
-        // enabledBorder: const OutlineInputBorder(
-        //   borderRadius: BorderRadius.all(
-        //     Radius.circular(15),
-        //   ),
-        // ),
-        // focusedBorder: const OutlineInputBorder(
-        //   borderRadius: BorderRadius.all(
-        //     Radius.circular(15),
-        //   ),
-        // ),
       ),
     );
   }

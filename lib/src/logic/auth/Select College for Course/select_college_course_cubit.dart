@@ -4,7 +4,6 @@ import 'package:college_management_app/src/package/data/modal/CollegeModal/colle
 import 'package:college_management_app/src/ui/auth/college%20Result/college_result_view.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:toastification/toastification.dart';
 
 import '../../../package/resorces/app_constance.dart';
 import '../../../package/utils/logger.dart';

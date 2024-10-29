@@ -48,37 +48,35 @@ class SelectCollegeFromCourseView extends StatelessWidget {
 
                   if (collegeId != null) {
                     Log.debug("View::::$collegeId");
-                    return Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.all(8),
-                      height: MediaQuery.sizeOf(context).height * 0.1,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: state.selectedCollegeIds.contains(collegeId) ? Colors.grey.shade300 : Colors.white,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
+                    final isSelected = state.selectedCollegeIds.contains(collegeId);
+
+                    return InkWell(
+                      onTap: () {
+                        context.read<SelectCollegeCourseCubit>().selectCollege(collegeId);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.all(8),
+                        height: MediaQuery.sizeOf(context).height * 0.1,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: isSelected ? Colors.grey.shade300 : Colors.white,
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(4, 4),
+                              blurRadius: 5,
+                              color: Colors.grey,
+                            ),
+                          ],
                         ),
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(4, 4),
-                            blurRadius: 5,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          context.read<SelectCollegeCourseCubit>().selectCollege(collegeId);
-                        },
                         child: ListTile(
                           title: Text(
                             college.collegeName,
                             style: const TextStyle(),
                           ),
                           subtitle: Text(college.courseName),
-                          trailing: state.selectedCollegeIds.contains(collegeId)
-                              ? const Icon(Icons.check, color: Colors.green)
-                              : const SizedBox.shrink(),
+                          trailing: isSelected ? const Icon(Icons.check, color: Colors.green) : const SizedBox.shrink(),
                         ),
                       ),
                     );
